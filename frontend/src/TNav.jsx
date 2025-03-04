@@ -111,10 +111,11 @@ const TopNavbar = () => {
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    first_name: "",
+    last_name: "",
     email: "",
+    username: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [signInData, setSignInData] = useState({
@@ -173,10 +174,11 @@ const TopNavbar = () => {
           <CloseButton onClick={() => setSignUpOpen(false)}>&times;</CloseButton>
           <h2>Sign Up</h2>
           <form onSubmit={handleSignUp}>
-            <Input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
+            <Input type="text" name="first_name" placeholder="First Name" onChange={handleChange} required />
+            <Input type="text" name="last_name" placeholder="Last Name" onChange={handleChange} required />
+            <Input type="text" name="username" placeholder="Username" onChange={handleChange} required />
             <Input type="email" name="email" placeholder="Email" onChange={handleChange} required />
             <Input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-            <Input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
             <SubmitButton type="submit">Register</SubmitButton>
           </form>
         </ModalContent>
