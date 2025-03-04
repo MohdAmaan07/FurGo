@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { FaStore, FaUsers, FaPaw, FaHeartbeat } from "react-icons/fa";
 import { MdPets } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import FurGoLogo from "./assets/FurGo.png"; // Ensure this path is correct
 
 // Styled Components
 const NavBar = styled.nav`
