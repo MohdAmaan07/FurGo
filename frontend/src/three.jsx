@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import largeImage from "./assets/FurGo (1).png"; // Corrected import
+import groomingImage from "./assets/Groom.jpeg"; // Corrected import
+import dogVideo from "./assets/dog1.mp4"; // Corrected import
 
 // Styled Components for Layout
 const Container = styled.div`
@@ -97,18 +100,18 @@ const ThreeCards = () => {
     <Container>
       {/* Left Side - Large Image Card */}
       <LeftCard>
-        <img src="/FurGo (1).png" alt="Large Image" />
+        <img src={largeImage} alt="Large Image" />
       </LeftCard>
 
       {/* Right Side - Two Stacked Cards with Position Control */}
       <RightCards>
         <LargeCard>
-          <img src="/Groom.jpeg" alt="Top Image" />
+          <img src={groomingImage} alt="Top Image" />
           <TextOverlay>Grooming Services</TextOverlay>
         </LargeCard>
         <SmallCard>
           <video autoPlay loop muted>
-            <source src="/dog1.mp4" type="video/mp4" />
+            <source src={dogVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <TextOverlay>Playful Moments</TextOverlay>
