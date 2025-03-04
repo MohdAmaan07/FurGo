@@ -1,10 +1,14 @@
-import logo from './logo.svg';
+
 import './App.css';
 import BottomNavbar from './BNav';
 import BottomNav from './BNav';
 import TopNavbar from './TNav';
 import ThreeCards from './three';
 import About from './about';
+import InfinityLogoCarousel from './logos';
+import ReviewsCarousel from './reviews';
+import Contact from './contact';
+import Footer from './footer';
 
 function App() {
   return (
@@ -13,6 +17,10 @@ function App() {
       <TopNavbar />
       <ThreeCards />
       <About />
+      <InfinityLogoCarousel />
+      <ReviewsCarousel />
+      <Contact />
+      <Footer />
     </div>
   );
 }

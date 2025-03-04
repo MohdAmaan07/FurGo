@@ -9,6 +9,12 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+    padding: 5px;
+  }
 `;
 
 // Left Large Image Card
@@ -23,6 +29,12 @@ const LeftCard = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+  }
 `;
 
 // Right Side Container (Stacked Cards with Position Control)
@@ -32,6 +44,11 @@ const RightCards = styled.div`
   flex-direction: column;
   gap: 10px;
   position: relative;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 5px;
+  }
 `;
 
 // Text Overlay (Initially Hidden, Appears on Hover)
@@ -44,6 +61,10 @@ const TextOverlay = styled.div`
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 // Common Card Styles (For Hover Background Effect)
@@ -76,6 +97,17 @@ const Card = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+
+    &:hover::after {
+      background: rgba(0, 0, 0, 0.4); /* Lighter overlay for mobile */
+    }
+  }
 `;
 
 // Large Right Card (Image)
@@ -83,13 +115,27 @@ const LargeCard = styled(Card)`
   height: 220px;
   top: -350px;
   left: -10px;
+
+  @media (max-width: 768px) {
+    top: 0;
+    left: 0;
+    height: auto;
+    max-height: 200px;
+  }
 `;
 
 // Small Right Card (Video)
 const SmallCard = styled(Card)`
-  height: 450px;
+  height: 470px;
   top: -120px;
   left: -10px;
+
+  @media (max-width: 768px) {
+    top: 0;
+    left: 0;
+    height: auto;
+    max-height: 300px;
+  }
 `;
 
 const ThreeCards = () => {
