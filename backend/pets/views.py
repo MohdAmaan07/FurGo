@@ -11,10 +11,10 @@ PET_FINDER_BASE_URL = os.getenv('PET_FINDER_BASE_URL')
 PET_FINDER_CLIENT_ID = os.getenv('PET_FINDER_CLIENT_ID')
 PET_FINDER_TOKEN_URL = os.getenv('PET_FINDER_TOKEN_URL')
 PET_FINDER_CLIENT_SECRET = os.getenv('PET_FINDER_CLIENT_SECRET')
-
-animals = ['dog', 'cat', 'fish', 'rabbit', 'turtle', 'bird']
     
 class PetFinder(APIView):
+    animals = ['dog', 'cat', 'fish', 'rabbit', 'turtle', 'bird']
+    
     def get(self, request, *args, **kwargs):
         data = {
             "grant_type": "client_credentials",
@@ -23,7 +23,7 @@ class PetFinder(APIView):
         }
         response = requests.post(PET_FINDER_TOKEN_URL, data=data)
         
-        access_token = Nonecl
+        access_token = None
         
         if response.status_code == 200:
             access_token = response.json()['access_token']
@@ -36,5 +36,5 @@ class PetFinder(APIView):
             response = requests.get(f'{url}animals?type={animal_type}', headers=headers)
             return Response(response.json())
         
-        responses = [requests.get(f'{url}animals?type={animal}', headers=headers) for animal in animals]
+        responses = [requests.get(f'{url}animals?type={animal}', headers=headers) for animal in self.animals]
         return Response([response.json() for response in responses])
