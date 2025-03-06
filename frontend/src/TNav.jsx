@@ -157,7 +157,9 @@ const TopNavbar = () => {
     <>
       <Navbar>
         <div className="logo">
+          <a href="/">
           <img src={logo} alt="FurGo Logo" />
+          </a>
         </div>
         <div className="nav-links">
           <div className="nav-item">VirtualAdopt</div>

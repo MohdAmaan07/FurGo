@@ -1,18 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
+import L1 from "./assets/L1.png";
+import L2 from "./assets/L2.png";
+import L3 from "./assets/L3.png";
+import L4 from "./assets/L4.png";
+import L5 from "./assets/L5.png";
+import L6 from "./assets/L6.png";
+import L7 from "./assets/L7.png";
+import L8 from "./assets/L8.png";
+import L9 from "./assets/L9.png";
+import L10 from "./assets/L10.png";
+
 // List of logos (Ensure these exist in the public folder)
 const logos = [
-  "6.png",
-  "7.png",
-  "8.png",
-  "9.png",
-  "10.png",
-  "11.png",
-  "12.png",
-  "13.png",
-  "14.png",
-  "15.png",
+  L1,
+  L2,
+  L3,
+  L4,
+  L5,
+  L6,
+  L7,
+  L8,
+  L9,
+  L10
 ];
 
 // Customizable settings
@@ -122,7 +133,7 @@ const InfinityLogoCarousel = () => {
       <CarouselContainer>
         <CarouselTrack ref={trackRef} totalLogos={logos.length} duration={SCROLL_SPEED}>
           {duplicatedLogos.map((logo, index) => (
-            <Logo key={index} src={`/${logo}`} alt={`Collaborator Logo ${index + 1}`} />
+            <Logo key={index} src={logo} alt={`Collaborator Logo ${index + 1}`} />
           ))}
         </CarouselTrack>
       </CarouselContainer>
