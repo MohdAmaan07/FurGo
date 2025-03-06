@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Cus1 from "./assets/Cus1.jpeg";
+import Cus2 from "./assets/Cus2.jpeg"; 
+import Cus3 from "./assets/Cus3.jpeg"; 
+import Cus4 from "./assets/Cus4.jpeg"; 
+import Cus5 from "./assets/Cus5.jpeg"; 
+import Cus6 from "./assets/Cus6.jpeg"; 
+import Cus7 from "./assets/Cus7.jpeg"; 
+import Cus8 from "./assets/Cus8.jpeg"; 
+import Cus9 from "./assets/Cus9.jpeg"; 
+import Cus10 from "./assets/Cus10.jpeg"; 
 
 // Sample reviews data
 const reviews = [
   {
     id: 1,
-    image: "Cus1.jpeg",
+    image: Cus1,
     name: "John & Ariza",
     review:
       "The AI chatbot feature is so cool! It analyzed my cat's behavior and suggested dietary changes that actually made a difference. The website is well-designed, and it’s obvious that a lot of thought went into making it useful for pet owners. Great job!",
@@ -13,7 +23,7 @@ const reviews = [
   },
   {
     id: 2,
-    image: "Cus2.jpeg",
+    image: Cus2,
     name: "Sarah Smith",
     review:
       "I’ve tried multiple pet service platforms, but this one stands out! The user-friendly interface made it so easy to order pet food and book vet appointments. My dog absolutely loved the high-quality treats. The AI recommendation system is a game-changer!",
@@ -21,7 +31,7 @@ const reviews = [
   },
   {
     id: 3,
-    image: "Cus3.jpeg",
+    image: Cus3,
     name: "Lee Haleiy",
     review:
       "Finding a reliable vet has never been easier! I booked a consultation through the website, and within minutes, I had an appointment scheduled. The vet was professional and knowledgeable. I appreciate the effort in creating a platform that truly prioritizes pet health.",
@@ -29,7 +39,7 @@ const reviews = [
   },
   {
     id: 4,
-    image: "Cus4.jpeg",
+    image: Cus4,
     name: "Eli Rose",
     review:
       "I love how this site connects pet lovers to everything they need in one place! I ordered pet toys, food, and even got recommendations on training techniques. The delivery was quick, and the quality of the products was top-notch. Will definitely be using this service regularly!",
@@ -37,7 +47,7 @@ const reviews = [
   },
   {
     id: 5,
-    image: "Cus5.jpeg",
+    image: Cus5,
     name: "Emma Watson",
     review:
       "I adopted a kitten through this site, and the entire process was seamless. The adoption section is well-organized, and I felt reassured knowing the animals are well cared for. The virtual adoption feature is a great initiative too! It’s wonderful to support a platform that genuinely cares for pets and their well-being.",
@@ -45,7 +55,7 @@ const reviews = [
   },
   {
     id: 6,
-    image: "Cus6.jpeg",
+    image: Cus6,
     name: "Beckett Frey",
     review:
       "Finding a reliable vet has never been easier! I booked a consultation through the website, and within minutes, I had an appointment scheduled. The vet was professional and knowledgeable. I appreciate the effort in creating a platform that truly prioritizes pet health and convenience for pet owners.",
@@ -53,7 +63,7 @@ const reviews = [
   },
   {
     id: 7,
-    image: "Cus7.jpeg",
+    image: Cus7,
     name: "Ron Surge",
     review:
       "I love how this site connects pet lovers to everything they need in one place! I ordered pet toys, food, and even got recommendations on training techniques. The delivery was quick, and the quality of the products was top-notch. Will definitely be using this service regularly!",
@@ -61,7 +71,7 @@ const reviews = [
   },
   {
     id: 8,
-    image: "Cus8.jpeg",
+    image: Cus8,
     name: "Mike Paul",
     review:
       "I was so happy to find a platform that offers everything for my rabbit in one place! From fresh hay and pellet food to chew toys and grooming kits, this site has it all. The customer support team was also super helpful when I had questions about the best bedding for my bunny. Fast delivery, great quality products, and a user-friendly experience—this is now my go-to site!",
@@ -69,7 +79,7 @@ const reviews = [
   },
   {
     id: 9,
-    image: "Cus9.jpeg",
+    image: Cus9,
     name: "Clark Watts",
     review:
       "As a proud cat parent, I’m very picky about where I buy food and accessories for my fur baby. This website exceeded my expectations! The variety of cat food options, scratch posts, and interactive toys is fantastic. My cat absolutely loves the organic treats I ordered. Plus, the vet consultation feature gave me great advice on managing her diet. Highly recommended!",
@@ -77,7 +87,7 @@ const reviews = [
   },
   {
     id: 10,
-    image: "Cus10.jpeg",
+    image: Cus10,
     name: "Sam Windsor",
     review:
       "Finding good quality turtle food and habitat accessories has always been a struggle—until now! This website had everything I needed, from water filters to calcium supplements. The ‘Know Your Little Friend’ section even helped me understand my turtle’s diet better. It’s rare to find a pet store that caters to exotic pets too. Absolutely love it!",
@@ -118,7 +128,7 @@ const Title = styled.h2`
 
 const CardContainer = styled.div`
   width: 1350px;
-  height: 550px;
+  height: 570px;
   display: flex;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -135,7 +145,7 @@ const CardContainer = styled.div`
 const ImageContainer = styled.div`
   width: 50%;
   height: 100%;
-  background-image: ${({ img }) => `url(/${img})`};
+  background-image: ${({ img }) => img ? `url(${img})` : "none"};
   background-size: cover;
   background-position: center;
 

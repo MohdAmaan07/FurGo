@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import Contacts from "./assets/Contacts.png";
+
 
 const Contact = () => {
   const leftSideRef = useRef(null);
@@ -68,7 +70,7 @@ const Contact = () => {
     cardHeading: {
       marginBottom: '20px',
       fontSize: '35px',
-      color: '#333',
+      color: 'black',
       fontFamily: 'Montaga',
       '@media (max-width: 768px)': {
         fontSize: '28px',
@@ -154,7 +156,7 @@ const Contact = () => {
       {/* Left Side: Image and Text */}
       <div style={styles.leftSide} ref={leftSideRef}>
         <img
-          src="/Contact.png" // Replace with your image URL
+          src={Contacts} // Replace with your image URL
           alt="Contact"
           style={styles.contactImage}
         />

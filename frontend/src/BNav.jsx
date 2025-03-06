@@ -98,18 +98,18 @@ const MenuButton = styled.div`
 `;
 
 const BottomNav = () => {
-  const [activeTab, setActiveTab] = useState("store");
+  const location = useLocation(); // Get current route
 
   return (
     <>
       <NavBar>
-        <NavItem to="/store" active={activeTab === "store"} onClick={() => setActiveTab("store")}>
+      <NavItem to="/store" active={location.pathname === "/store"}>
           <FaStore />
           <span>Store</span>
         </NavItem>
 
-        <NavItem to="/community" active={activeTab === "community"} onClick={() => setActiveTab("community")}>
-          <FaUsers />
+        <NavItem to="/community" active={location.pathname === "/community"}>
+        <FaUsers />
           <span>PetInsta</span>
         </NavItem>
 
@@ -120,13 +120,13 @@ const BottomNav = () => {
           </MenuButton>
         </div>
 
-        <NavItem to="/adoption" active={activeTab === "adoption"} onClick={() => setActiveTab("adoption")}>
-          <FaPaw />
+        <NavItem to="/adoption" active={location.pathname === "/adoption"}>
+        <FaPaw />
           <span>Adoption</span>
         </NavItem>
 
-        <NavItem to="/vet" active={activeTab === "vet"} onClick={() => setActiveTab("vet")}>
-          <FaHeartbeat />
+        <NavItem to="/vet" active={location.pathname === "/vet"}>
+        <FaHeartbeat />
           <span>Vet</span>
         </NavItem>
       </NavBar>

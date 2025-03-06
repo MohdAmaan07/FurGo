@@ -89,15 +89,15 @@ const About = () => {
   // Images move outward in different directions
   const images = [
     { src: pet1, x: "-190px", y: "-220px" }, // Top-left
-    { src: pet2, x: "100px", y: "-230px" }, // Top-right
-    { src: pet3, x: "-390px", y: "190px" }, // Bottom-left
+    { src: pet2, x: "200px", y: "-230px" }, // Top-right
+    { src: pet3, x: "-310px", y: "220px" }, // Bottom-left
     { src: pet4, x: "70px", y: "220px" }, // Bottom-right
     { src: pet5, x: "-500px", y: "-220px" }, // Top-center
-    { src: pet6, x: "600px", y: "-200px" }, // Bottom-center
-    { src: pet7, x: "-580px", y: "90px" }, // Left-center
+    { src: pet6, x: "500px", y: "-200px" }, // Bottom-center
+    { src: pet7, x: "-580px", y: "150px" }, // Left-center
     { src: pet8, x: "550px", y: "50px" },
     { src: pet9, x: "-420px", y: "-30px" },
-    { src: pet10, x: "400px", y: "140px" },
+    { src: pet10, x: "350px", y: "210px" },
   ];
 
   // Adjusted positions for mobile
