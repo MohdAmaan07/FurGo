@@ -11,7 +11,9 @@ import {
   faCat,
   faDove,
   faQuestionCircle,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 import TopNavbar from "./TNav";
 import Footer from "./footer";
@@ -24,6 +26,7 @@ const AdoptionPage = () => {
     location: "",
   });
   const [selectedPet, setSelectedPet] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Sample data for pets
   const pets = [
@@ -114,12 +117,18 @@ const AdoptionPage = () => {
     setSelectedPet(null);
   };
 
-  // Filter pets based on selected filters
+  const handleSearch = () => {
+    // Implement search functionality here
+    console.log("Search Query:", searchQuery);
+  };
+
+  // Filter pets based on selected filters and search query
   const filteredPets = pets.filter((pet) => {
     return (
       (filters.age === "" || pet.age === filters.age) &&
       (filters.type === "" || pet.type === filters.type) &&
-      (filters.location === "" || pet.owner.includes(filters.location))
+      (filters.location === "" || pet.owner.includes(filters.location)) &&
+      (searchQuery === "" || pet.name.toLowerCase().includes(searchQuery.toLowerCase()))
     );
   });
 
@@ -128,21 +137,25 @@ const AdoptionPage = () => {
     dots: true,
     infinite: filteredPets.length > 3, // Disable infinite scroll if fewer than 3 pets
     speed: 500,
-    slidesToShow: Math.min(3, filteredPets.length), // Show up to 3 cards
+    slidesToShow: 3, // Show 3 cards at once
     slidesToScroll: 1,
+    centerMode: true, // Enable center mode
+    centerPadding: "0", // No extra padding around the centered card
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(2, filteredPets.length), // Show up to 2 cards
-          slidesToScroll: 1,
+          slidesToShow: 2, // Show 2 cards on medium screens
+          centerMode: true,
+          centerPadding: "0",
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1, // Always show 1 card on smaller screens
-          slidesToScroll: 1,
+          slidesToShow: 1, // Show 1 card on smaller screens
+          centerMode: true,
+          centerPadding: "0",
         },
       },
     ],
@@ -152,20 +165,37 @@ const AdoptionPage = () => {
     <>
       <TopNavbar />
       <BottomNav />
-      <div className="adoption-page">
+      <AdoptionPageContainer>
+        {/* Search Bar */}
+        <SearchBarContainer>
+          <SearchInputContainer>
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <SearchInput
+              type="text"
+              placeholder="Search pets..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </SearchInputContainer>
+          <SearchButton onClick={handleSearch}>Search</SearchButton>
+        </SearchBarContainer>
+
         {/* Filters Navbar */}
-        <div className="filters-navbar">
-          <div className="filter">
+        <FiltersNavbar>
+          <Filter>
             <FontAwesomeIcon icon={faBirthdayCake} className="filter-icon" />
             <label>Age:</label>
             <select onChange={(e) => handleFilterChange("age", e.target.value)}>
               <option value="">All</option>
-              <option value="0-6 months">0-6 months</option>
-              <option value="1 to 3 years">1 to 3 years</option>
-              <option value="More than 3 years">More than 3 years</option>
+              <option value="0-6 months">0-11 months</option>
+              <option value="1 year">1 year</option>
+              <option value="2 years">2 years</option>
+              <option value="3 years">3 years</option>
+              <option value="4 years">4 years</option>
+              <option value="More than 4 years">More than 4 years</option>
             </select>
-          </div>
-          <div className="filter">
+          </Filter>
+          <Filter>
             <FontAwesomeIcon icon={faPaw} className="filter-icon" />
             <label>Type:</label>
             <select onChange={(e) => handleFilterChange("type", e.target.value)}>
@@ -183,8 +213,8 @@ const AdoptionPage = () => {
                 <FontAwesomeIcon icon={faQuestionCircle} /> Other
               </option>
             </select>
-          </div>
-          <div className="filter">
+          </Filter>
+          <Filter>
             <FontAwesomeIcon icon={faMapMarkerAlt} className="filter-icon" />
             <label>Location:</label>
             <select
@@ -197,49 +227,41 @@ const AdoptionPage = () => {
                 </option>
               ))}
             </select>
-          </div>
-        </div>
+          </Filter>
+        </FiltersNavbar>
 
         {/* Page Heading */}
-        <h1 className="page-heading">Find Your Perfect Pet</h1>
+        <PageHeading>Find Your Perfect Little Buddy</PageHeading>
 
         {/* Carousel of Cards */}
-        <div className="cards-carousel">
+        <CardsCarousel>
           <Slider {...sliderSettings}>
             {filteredPets.map((pet) => (
               <div key={pet.id}>
-                <div
-                  className="pet-card"
-                  onClick={() => handleCardClick(pet)}
-                >
-                  <div
-                    className="card-image"
-                    style={{ backgroundImage: `url(${pet.image})` }}
-                  >
-                    <div className="pet-image-frame"></div>
-                  </div>
-                  <div className="pet-info">
+                <PetCard onClick={() => handleCardClick(pet)}>
+                  <CardImage style={{ backgroundImage: `url(${pet.image})` }}>
+                    <PetImageFrame />
+                  </CardImage>
+                  <PetInfo>
                     <p>Age: {pet.age}</p>
                     <p>Type: {pet.type}</p>
-                  </div>
-                </div>
+                  </PetInfo>
+                </PetCard>
               </div>
             ))}
           </Slider>
-        </div>
+        </CardsCarousel>
 
         {/* Detailed View Modal */}
         {selectedPet && (
-          <div className="pet-details-modal">
-            <div className="modal-content">
-              <span className="close-button" onClick={closeDetails}>
-                &times;
-              </span>
-              <div className="details-container">
-                <div className="pet-image">
+          <PetDetailsModal>
+            <ModalContent>
+              <CloseButton onClick={closeDetails}>&times;</CloseButton>
+              <DetailsContainer>
+                <PetImage>
                   <img src={selectedPet.image} alt={selectedPet.name} />
-                </div>
-                <div className="pet-info">
+                </PetImage>
+                <ModalPetInfo>
                   <h2>{selectedPet.name}</h2>
                   <p>
                     <strong>Type:</strong> {selectedPet.type}
@@ -263,194 +285,236 @@ const AdoptionPage = () => {
                   <p>
                     <strong>Contact:</strong> {selectedPet.contact}
                   </p>
-                </div>
-              </div>
-              <div className="action-buttons">
-                <button className="contact-button">Contact</button>
-                <button className="location-button">Location</button>
-              </div>
-            </div>
-          </div>
+                </ModalPetInfo>
+              </DetailsContainer>
+              <ActionButtons>
+                <ContactButton>Contact</ContactButton>
+                <LocationButton>Location</LocationButton>
+              </ActionButtons>
+            </ModalContent>
+          </PetDetailsModal>
         )}
-      </div>
+      </AdoptionPageContainer>
       <Footer />
-
-      {/* Inline CSS */}
-      <style>{`
-        .adoption-page {
-  font-family: "Montaga", serif;
-          padding: 0px;
-          margin-bottom: -20px; /* Reduced gap between carousel and footer */
-        }
-
-        .filters-navbar {
-          display: flex;
-          justify-content: space-around;
-          background-color:rgb(238, 133, 63);
-          padding: 10px;
-          border-radius: 8px;
-          margin: 0 20px;
-        }
-
-        .filter {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .filter-icon {
-          font-size: 18px;
-          color: #555;
-        }
-
-        .filter label {
-          font-weight: bold;
-        }
-
-        .filter select {
-          padding: 5px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-        }
-
-        .page-heading {
-          text-align: center;
-          margin: 40px 0;
-          font-size: 40px;
-          color: #333;
-        }
-
-        .cards-carousel {
-          margin: 0px 0;
-          margin: 0 28px;
-        }
-
-        .slick-slide {
-          padding: 0 10px; /* Add gap between cards */
-        }
-
-        .pet-card {
-          width: 320px; /* Adjust width as needed */
-          height: 400px; /* Adjust height as needed */
-          background-color:rgb(36, 180, 247);
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          cursor: pointer;
-          margin-left: -20px;
-        }
-
-        .card-image {
-          width: 100%;
-          height: 100%;
-          background-size: cover;
-          background-position: center;
-          position: relative;
-        }
-
-        .pet-image-frame {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 150px;
-          height: 150px;
-          border: 5px solid #fff;
-          border-radius: 50%;
-        }
-
-        .pet-info {
-          padding: 15px;
-          text-align: center;
-          background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-        }
-
-        .pet-details-modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .modal-content {
-          background-color: #fff;
-          padding: 20px;
-          border-radius: 8px;
-          width: 50%;
-          max-width: 800px;
-          position: relative;
-        }
-
-        .close-button {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          font-size: 24px;
-          cursor: pointer;
-          color: #555;
-        }
-
-        .details-container {
-          display: flex;
-          gap: 20px;
-        }
-
-        .pet-image {
-          flex: 1;
-        }
-
-        .pet-image img {
-          width: 100%;
-          border-radius: 8px;
-        }
-
-        .pet-info {
-          flex: 2;
-          padding-left: 20px;
-        }
-
-        .pet-info h2 {
-          margin-top: 0;
-          color: black;
-        }
-
-        .pet-info p {
-          margin: 10px 0;
-          color: black;
-        }
-
-        .action-buttons {
-          text-align: right;
-          margin-top: 20px;
-        }
-
-        .contact-button,
-        .location-button {
-          padding: 10px 20px;
-          margin-left: 10px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-        }
-
-        .contact-button {
-          background-color: #ff6600;
-          color: #fff;
-        }
-
-        .location-button {
-          background-color: #ff6600;
-          color: #fff;
-        }
-      `}</style>
     </>
   );
 };
 
 export default AdoptionPage;
+
+// Styled Components
+const AdoptionPageContainer = styled.div`
+  font-family: "Montaga", serif;
+  padding: 0px;
+  margin-bottom: 70px; /* Reduced gap between carousel and footer */
+`;
+
+const SearchBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const SearchInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 10px;
+
+  .search-icon {
+    font-size: 18px;
+    color: #555;
+    margin-right: 10px;
+  }
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+`;
+
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff6600;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e65c00;
+  }
+`;
+
+const FiltersNavbar = styled.div`
+  display: flex;
+  justify-content: space-around;
+  background-color: rgb(238, 133, 63);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 0 20px;
+`;
+
+const Filter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .filter-icon {
+    font-size: 18px;
+    color: #555;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+`;
+
+const PageHeading = styled.h1`
+  text-align: center;
+  margin: 50px 0; /* Reduced margin */
+  font-size: 45px;
+  color: #333;
+`;
+
+const CardsCarousel = styled.div`
+  margin: 0 140px; /* Adjusted margin */
+`;
+
+const PetCard = styled.div`
+  width: 310px; /* Adjust width as needed */
+  height: 410px; /* Adjust height as needed */
+  background-color: rgb(72, 210, 245);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin: 0 10px; /* Adjusted margin */
+`;
+
+const CardImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+`;
+
+const PetImageFrame = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 8px solid orange;
+  border-radius: 50%;
+`;
+
+const PetInfo = styled.div`
+  padding: 15px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+`;
+
+const PetDetailsModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 50%;
+  max-width: 800px;
+  position: relative;
+`;
+
+const CloseButton = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const PetImage = styled.div`
+  flex: 1;
+
+  img {
+    width: 100%;
+    border-radius: 8px;
+  }
+`;
+
+const ModalPetInfo = styled.div`
+  flex: 2;
+  padding-left: 20px;
+
+  h2 {
+    margin-top: 0;
+    color: black;
+  }
+
+  p {
+    margin: 10px 0;
+    color: black;
+  }
+`;
+
+const ActionButtons = styled.div`
+  text-align: right;
+  margin-top: 20px;
+`;
+
+const ContactButton = styled.button`
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  background-color: #ff6600;
+  color: #fff;
+`;
+
+const LocationButton = styled.button`
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  background-color: #ff6600;
+  color: #fff;
+`;
