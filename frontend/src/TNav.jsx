@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link
 import styled from "styled-components";
 import axios from "axios";
 import logo from "./assets/FurGo.png";
@@ -24,12 +25,14 @@ const Navbar = styled.nav`
   .nav-item {
     margin-right: 20px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     transition: 0.3s;
+    color: white; /* Default color */
+    text-decoration: none; /* Remove underline */
   }
 
   .nav-item:hover {
-    color: black;
+    color: black; /* Hover color */
   }
 `;
 
@@ -157,14 +160,17 @@ const TopNavbar = () => {
     <>
       <Navbar>
         <div className="logo">
-          <a href="/">
-          <img src={logo} alt="FurGo Logo" />
-          </a>
+          <Link to="/">
+            <img src={logo} alt="FurGo Logo" />
+          </Link>
         </div>
         <div className="nav-links">
-          <div className="nav-item">VirtualAdopt</div>
-          <div className="nav-item">WoofAI</div>
-          <div className="nav-item">Donate</div>
+          <Link to="/virtualadopt" className="nav-item">
+            VirtualAdopt
+          </Link>
+          <Link to="/woofai" className="nav-item">
+            WoofAI
+          </Link>
           <Button onClick={() => setSignInOpen(true)}>Sign In</Button>
           <Button onClick={() => setSignUpOpen(true)}>Sign Up</Button>
         </div>

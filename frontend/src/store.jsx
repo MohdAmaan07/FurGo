@@ -277,7 +277,7 @@ const StorePage = () => {
             <FaFilter />
             <FilterDropdown show={showFilter}>
               <FilterTitle>Filter By Category</FilterTitle>
-              {["All", "Food", "Toys", "Beds & Homes", "Accessories", "Birds"].map((category) => (
+              {["All", "Food", "Toys", "Beds & Homes", "Accessories", "Birds", "Med Care"].map((category) => (
                 <FilterOption key={category}>
                   <input
                     type="radio"

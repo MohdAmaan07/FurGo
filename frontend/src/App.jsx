@@ -11,6 +11,10 @@ import Contact from "./contact";
 import Footer from "./footer";
 import StorePage from "./store"; // Import the store page component
 import AdoptionPage from "./adoption";
+import CarouselComponent from "./virtualadopt";
+import WoofAI from "./woof";
+import CarouselWithIcons from "./vet";
+import PetSocialFeed from "./petforum";
 
 function HomePage() {
   return (
@@ -33,6 +37,13 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/store" element={<StorePage />} />
       <Route path="/adoption" element={<AdoptionPage />} />
+      <Route path="/VirtualAdopt" element={<CarouselComponent />} />
+      <Route path="/WoofAI" element={<WoofAI />} />
+      <Route path="/Vet" element={<CarouselWithIcons />} />
+      <Route path="/community" element={<PetSocialFeed />} />
+
+      
+
     </Routes>
   );
 }
