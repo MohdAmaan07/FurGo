@@ -15,6 +15,38 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load Env Variables
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+PET_FINDER_BASE_URL = os.getenv('PET_FINDER_BASE_URL')
+PET_FINDER_TOKEN_URL = os.getenv('PET_FINDER_TOKEN_URL')
+PET_FINDER_CLIENT_ID = os.getenv('PET_FINDER_CLIENT_ID')
+PET_FINDER_CLIENT_SECRET = os.getenv('PET_FINDER_CLIENT_SECRET')
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'debug.log'),
+            'maxBytes': 1024 * 1024 * 5, 
+            'backupCount': 3,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
