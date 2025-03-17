@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FaInstagram, FaFacebook, FaPinterest, FaTwitter, FaYoutube } from "react-icons/fa";
-import footer from "./assets/footer.png"; 
+import footer from "./assets/footer.png";
 
 // Styled Components
 const FooterContainer = styled.footer`
@@ -32,27 +32,30 @@ const TopSection = styled.div`
 
 // Address Section - Left Aligned
 const Address = styled.div`
-  top: 200px;
-  left: 20px;
-  position: absolute
+  top: 790px; /* Adjusted from 200px to 100px to shift it upward */
+  left: 50px;
+  position: absolute;
   width: 30%;
   text-align: left;
-  font-size: 20px;
-  line-spacing: -10px
+  font-size: 22px;
+  line-height: 0.8; /* Improved line spacing */
 
   @media (max-width: 768px) {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
+    position: static; /* Reset position for mobile */
   }
 `;
 
 // Quick Links - Center Aligned but Left-aligned Internally
 const QuickLinksContainer = styled.div`
-  width: 40%;
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 50px;
+  marginLeft: 600px
+
 
   @media (max-width: 768px) {
     width: 100%;
@@ -71,13 +74,13 @@ const QuickLinks = styled.div`
 const Link = styled.a`
   color: white;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   margin: 6px 0;
   transition: 0.3s;
 
   &:hover {
-    color: rgb(204, 92, 22);
+    color: rgb(70, 55, 46);
   }
 `;
 
@@ -139,7 +142,6 @@ const Footer = () => {
             <Link href="#">HOME</Link>
             <Link href="#">VIRTUAL ADOPT</Link>
             <Link href="#">PETINSTA</Link>
-            <Link href="#">DONATE</Link>
           </QuickLinks>
           <QuickLinks>
             <Link href="#">ADOPTION</Link>

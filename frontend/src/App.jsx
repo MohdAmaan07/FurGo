@@ -15,6 +15,8 @@ import CarouselComponent from "./virtualadopt";
 import WoofAI from "./woof";
 import CarouselWithIcons from "./vet";
 import PetSocialFeed from "./petforum";
+import KnowYourPet from "./kyp";
+import Feed from "./feed";
 
 function HomePage() {
   return (
@@ -40,7 +42,11 @@ function App() {
       <Route path="/VirtualAdopt" element={<CarouselComponent />} />
       <Route path="/WoofAI" element={<WoofAI />} />
       <Route path="/Vet" element={<CarouselWithIcons />} />
-      <Route path="/community" element={<PetSocialFeed />} />
+      <Route path="/community" element={<Feed />} />
+      <Route path="/kyp" element={<KnowYourPet />} />
+      <Route path="/Feed" element={<PetSocialFeed />} />
+
+
 
       
 

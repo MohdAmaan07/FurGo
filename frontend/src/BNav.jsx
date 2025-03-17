@@ -113,12 +113,13 @@ const BottomNav = () => {
           <span>PetInsta</span>
         </NavItem>
 
-        {/* Center Circular Menu Button */}
+        <NavItem to="/kyp" active={location.pathname === "/kyp"}>
         <div style={{ position: "relative" }}>
           <MenuButton>
             <MdPets />
           </MenuButton>
         </div>
+        </NavItem>
 
         <NavItem to="/adoption" active={location.pathname === "/adoption"}>
         <FaPaw />

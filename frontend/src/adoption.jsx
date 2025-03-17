@@ -14,10 +14,12 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import dog6 from './assets/dog6.png';
 
 import TopNavbar from "./TNav";
 import Footer from "./footer";
 import BottomNav from "./BNav";
+import FAQSection from "./adopt";
 
 const AdoptionPage = () => {
   const [filters, setFilters] = useState({
@@ -166,6 +168,9 @@ const AdoptionPage = () => {
       <TopNavbar />
       <BottomNav />
       <AdoptionPageContainer>
+        {/* Image in the top-left corner */}
+        <TopLeftImage src={dog6} alt="Logo" />
+
         {/* Search Bar */}
         <SearchBarContainer>
           <SearchInputContainer>
@@ -294,6 +299,7 @@ const AdoptionPage = () => {
             </ModalContent>
           </PetDetailsModal>
         )}
+        <FAQSection />
       </AdoptionPageContainer>
       <Footer />
     </>
@@ -307,6 +313,16 @@ const AdoptionPageContainer = styled.div`
   font-family: "Montaga", serif;
   padding: 0px;
   margin-bottom: 70px; /* Reduced gap between carousel and footer */
+  position: relative; /* Added for positioning the top-left image */
+`;
+
+const TopLeftImage = styled.img`
+  position: absolute;
+  top: 30px;
+  left: 140px;
+  width: 200px; /* Adjust size as needed */
+  height: auto;
+  z-index: 10; /* Ensure it's above other elements */
 `;
 
 const SearchBarContainer = styled.div`
@@ -390,7 +406,7 @@ const PageHeading = styled.h1`
   text-align: center;
   margin: 50px 0; /* Reduced margin */
   font-size: 45px;
-  color: #333;
+  color: black;
 `;
 
 const CardsCarousel = styled.div`
@@ -430,6 +446,7 @@ const PetImageFrame = styled.div`
 const PetInfo = styled.div`
   padding: 15px;
   text-align: center;
+  font-size: 40px
   background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
 `;
 
@@ -443,6 +460,7 @@ const PetDetailsModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 20px
 `;
 
 const ModalContent = styled.div`

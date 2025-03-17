@@ -45,6 +45,7 @@ const AboutContent = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 2;
   position: relative;
+  font-size: 19px;
 
   @media (max-width: 768px) {
     max-width: 90%;
@@ -88,16 +89,16 @@ const About = () => {
 
   // Images move outward in different directions
   const images = [
-    { src: pet1, x: "-190px", y: "-220px" }, // Top-left
+    { src: pet1, x: "-190px", y: "-240px" }, // Top-left
     { src: pet2, x: "200px", y: "-230px" }, // Top-right
-    { src: pet3, x: "-310px", y: "220px" }, // Bottom-left
-    { src: pet4, x: "70px", y: "220px" }, // Bottom-right
+    { src: pet3, x: "-310px", y: "240px" }, // Bottom-left
+    { src: pet4, x: "70px", y: "250px" }, // Bottom-right
     { src: pet5, x: "-500px", y: "-220px" }, // Top-center
     { src: pet6, x: "500px", y: "-200px" }, // Bottom-center
     { src: pet7, x: "-580px", y: "150px" }, // Left-center
     { src: pet8, x: "550px", y: "50px" },
     { src: pet9, x: "-420px", y: "-30px" },
-    { src: pet10, x: "350px", y: "210px" },
+    { src: pet10, x: "350px", y: "230px" },
   ];
 
   // Adjusted positions for mobile

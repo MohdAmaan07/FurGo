@@ -12,14 +12,16 @@ import BottomNav from "./BNav";
 import C3 from "./assets/C3.png";
 import C4 from "./assets/C4.png";
 import C5 from "./assets/C5.png";
+import PetShopHero from "./foot";
 
 
 // Styled Components
 const StoreContainer = styled.div`
-  width: 90%;
+  width: 97%;
   margin: auto;
   padding: 20px;
   font-family: "Montaga", serif;
+  background-color:rgba(88, 233, 165, 0.73)  
 `;
 
 const TopBar = styled.div`
@@ -150,7 +152,7 @@ const FilterOption = styled.label`
 
 // Carousel Container
 const CarouselContainer = styled.div`
-  width: 100%;
+  width: 99.5%;
   margin-bottom: 20px;
 `;
 
@@ -165,7 +167,7 @@ const ProductGrid = styled.div`
   margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  gap: 20px;
   justify-content: center;
 `;
 
@@ -321,6 +323,7 @@ const StorePage = () => {
         ))}
       </ProductGrid>
     </StoreContainer>
+    <PetShopHero />
     <Footer />
     </>
   );

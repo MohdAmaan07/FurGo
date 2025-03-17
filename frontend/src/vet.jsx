@@ -4,9 +4,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FaStethoscope, FaAward, FaPhone, FaUserMd } from 'react-icons/fa'; // Icons
 
-import vet1 from "./assets/vet1.jpg";
-import vet2 from "./assets/vet2.jpg";
-import vet3 from "./assets/vet3.jpg";
+import vet1 from "./assets/vet1.png";
+import vet2 from "./assets/vet2.png";
+import vet3 from "./assets/vet3.png";
 import videoFile from "./assets/vetvideo (1).mp4"; // Import your video file
 import Footer from './footer';
 import TopNavbar from './TNav';

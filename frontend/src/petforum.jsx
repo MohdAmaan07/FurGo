@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
-
-// Import images from assets
+import { useNavigate } from 'react-router-dom'; // For navigation
 import backgroundImage from './assets/background.jpg'; // Replace with your background image path
-import Footer from './footer';
 import TopNavbar from './TNav';
 import BottomNav from './BNav';
+import Footer from './footer';
+import PhotoCollage from './photo';
 
 const PetSocialFeed = () => {
-  // State to manage posts
-  const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ photo: null, description: '' });
-
-  // State to manage comments and likes
-  const [comments, setComments] = useState({});
-  const [likes, setLikes] = useState({});
-  const [commentInputs, setCommentInputs] = useState({}); // State for comment inputs
-  const [activeCommentSection, setActiveCommentSection] = useState(null); // State to toggle comment section
+  const navigate = useNavigate(); // Hook for navigation
 
   // Handle file upload
   const handleFileChange = (e) => {
@@ -30,50 +23,30 @@ const PetSocialFeed = () => {
     setNewPost({ ...newPost, description: e.target.value });
   };
 
-  // Add a new post
+  // Add a new post and navigate to Feed
   const handleAddPost = () => {
     if (newPost.photo && newPost.description) {
       const post = {
         id: Date.now(),
         photo: newPost.photo,
         description: newPost.description,
+        username: 'YourUsername', // Replace with dynamic username if available
+        displayPicture: 'https://via.placeholder.com/50', // Replace with dynamic DP if available
       };
-      setPosts([post, ...posts]);
-      setNewPost({ photo: null, description: '' }); // Reset form
+
+      // Save the post to localStorage (or a global state/context)
+      const existingPosts = JSON.parse(localStorage.getItem('posts')) || [];
+      const updatedPosts = [post, ...existingPosts];
+      localStorage.setItem('posts', JSON.stringify(updatedPosts));
+
+      // Navigate to Feed
+      navigate('/community');
     }
   };
 
-  // Handle like a post
-  const handleLike = (postId) => {
-    setLikes((prevLikes) => ({
-      ...prevLikes,
-      [postId]: (prevLikes[postId] || 0) + 1,
-    }));
-  };
-
-  // Handle adding a comment
-  const handleAddComment = (postId) => {
-    const comment = commentInputs[postId];
-    if (comment) {
-      setComments((prevComments) => ({
-        ...prevComments,
-        [postId]: [...(prevComments[postId] || []), comment],
-      }));
-      setCommentInputs((prevInputs) => ({ ...prevInputs, [postId]: '' })); // Clear input
-    }
-  };
-
-  // Handle sharing a post
-  const handleShare = (postId) => {
-    const postLink = `${window.location.origin}/post/${postId}`; // Example link
-    navigator.clipboard.writeText(postLink).then(() => {
-      alert('Post link copied to clipboard!');
-    });
-  };
-
-  // Toggle comment section
-  const toggleCommentSection = (postId) => {
-    setActiveCommentSection(activeCommentSection === postId ? null : postId);
+  // Navigate to Feed
+  const goToFeed = () => {
+    navigate('/community');
   };
 
   return (
@@ -84,8 +57,13 @@ const PetSocialFeed = () => {
         {/* Background Image */}
         <div style={{ ...styles.backgroundImage, backgroundImage: `url(${backgroundImage})` }}></div>
 
-        {/* Title */}
-        <h1 style={styles.title}>PetInsta</h1>
+        {/* Header with Centered Title and Right-Aligned Feed Button */}
+        <div style={styles.header}>
+          <h1 style={styles.title}>PetInsta</h1>
+          <button onClick={goToFeed} style={styles.feedButton}>
+            Feed
+          </button>
+        </div>
 
         {/* Create a Post Section */}
         <div style={styles.createPostContainer}>
@@ -106,63 +84,7 @@ const PetSocialFeed = () => {
             Post
           </button>
         </div>
-
-        {/* Posts Feed */}
-        <div style={styles.feedContainer}>
-          {posts.map((post) => (
-            <div key={post.id} style={styles.postContainer}>
-              <div style={styles.postImageContainer}>
-                <img src={post.photo} alt="Pet" style={styles.postImage} />
-              </div>
-              <p style={styles.postDescription}>{post.description}</p>
-              <div style={styles.interactionContainer}>
-                <button
-                  onClick={() => handleLike(post.id)}
-                  style={styles.likeButton}
-                >
-                  ❤️ {likes[post.id] || 0} Likes
-                </button>
-                <button
-                  onClick={() => handleShare(post.id)}
-                  style={styles.shareButton}
-                >
-                  🔗 Share
-                </button>
-                <button
-                  onClick={() => toggleCommentSection(post.id)}
-                  style={styles.commentButton}
-                >
-                  💬 Comment
-                </button>
-              </div>
-              {activeCommentSection === post.id && (
-                <div style={styles.commentsSection}>
-                  <h2>Comments:</h2>
-                  {(comments[post.id] || []).map((comment, index) => (
-                    <p key={index} style={styles.comment}>
-                      {comment}
-                    </p>
-                  ))}
-                  <input
-                    type="text"
-                    placeholder="Add a comment..."
-                    value={commentInputs[post.id] || ''}
-                    onChange={(e) =>
-                      setCommentInputs((prevInputs) => ({
-                        ...prevInputs,
-                        [post.id]: e.target.value,
-                      }))
-                    }
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleAddComment(post.id);
-                    }}
-                    style={styles.commentInput}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <PhotoCollage />
       </div>
       <Footer />
     </>
@@ -187,18 +109,37 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     zIndex: -1,
-    opacity: 0.5, // Adjust opacity as needed
+    opacity: 0.5,
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+    position: 'relative', // To allow absolute positioning of the Feed button
   },
   title: {
-    textAlign: 'center',
     fontSize: '60px',
     color: 'black',
-    marginBottom: '20px',
+    textAlign: 'center', // Center the title text
+    flex: 1, // Allow the title to take up remaining space
+  },
+  feedButton: {
+    backgroundColor: '#a277ff',
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '20px',
+    position: 'absolute', // Position the button absolutely
+    right: -330,
+    top: 10 // Align the button to the right
   },
   createPostContainer: {
     marginBottom: '100px',
     textAlign: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: '20px',
     borderRadius: '10px',
     color: 'purple',
@@ -225,83 +166,6 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     fontSize: '20px',
-  },
-  feedContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    alignItems: 'center', // Center the posts
-  },
-  postContainer: {
-    border: '3px solid #ccc',
-    borderRadius: '10px',
-    padding: '15px',
-    backgroundColor: 'rgba(214, 156, 248, 0.8)', // Semi-transparent background
-    width: '100%', // Adjusted to take full width of the container
-    maxWidth: '500px', // Limit the maximum width of the post card
-  },
-  postImageContainer: {
-    width: '100%',
-    height: '300px', // Fixed height for image container
-    overflow: 'hidden', // Ensure the image fits within the container
-    borderRadius: '10px',
-  },
-  postImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover', // Ensure the image covers the container
-  },
-  postDescription: {
-    fontSize: '26px',
-    margin: '10px 0',
-  },
-  interactionContainer: {
-    display: 'flex',
-    gap: '10px',
-    justifyContent: 'center',
-  },
-  likeButton: {
-    backgroundColor: '#ff6b6b',
-    color: 'white',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '18px',
-  },
-  shareButton: {
-    backgroundColor: 'green',
-    color: 'white',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '17px',
-  },
-  commentButton: {
-    backgroundColor: '#6b6bff',
-    color: 'white',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '17px',
-  },
-  commentsSection: {
-    marginTop: '10px',
-  },
-  comment: {
-    backgroundColor: '#e0e0e0',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    margin: '5px 0',
-    fontSize: '17px',
-  },
-  commentInput: {
-    width: '100%',
-    padding: '5px',
-    borderRadius: '5px',
-    border: '2px solid #ccc',
   },
 };
 
