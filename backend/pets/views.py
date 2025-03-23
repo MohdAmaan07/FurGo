@@ -1,22 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 import requests
 import os
 import concurrent.futures
 from django.core.cache import cache
 import logging
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-PET_FINDER_BASE_URL = os.getenv('PET_FINDER_BASE_URL')
-PET_FINDER_TOKEN_URL = os.getenv('PET_FINDER_TOKEN_URL')
-PET_FINDER_CLIENT_ID = os.getenv('PET_FINDER_CLIENT_ID')
-PET_FINDER_CLIENT_SECRET = os.getenv('PET_FINDER_CLIENT_SECRET')
-
-class PetFinder(APIView, PageNumberPagination):
-    page_size = 10 
+class PetFinder(APIView):
+    PET_FINDER_BASE_URL = settings.PET_FINDER_BASE_URL
+    PET_FINDER_TOKEN_URL = settings.PET_FINDER_TOKEN_URL
+    PET_FINDER_CLIENT_ID = settings.PET_FINDER_CLIENT_ID
+    PET_FINDER_CLIENT_SECRET = settings.PET_FINDER_CLIENT_SECRET
+    
     animals = ['dog', 'cat', 'fish', 'rabbit', 'turtle', 'bird']
 
     def get_access_token(self):
@@ -24,10 +23,10 @@ class PetFinder(APIView, PageNumberPagination):
         if not token:
             data = {
                 "grant_type": "client_credentials",
-                "client_id": PET_FINDER_CLIENT_ID,
-                "client_secret": PET_FINDER_CLIENT_SECRET
+                "client_id": self.PET_FINDER_CLIENT_ID,
+                "client_secret": self.PET_FINDER_CLIENT_SECRET
             }
-            token_response = requests.post(PET_FINDER_TOKEN_URL, data=data)
+            token_response = requests.post(self.PET_FINDER_TOKEN_URL, data=data)
             if token_response.status_code != status.HTTP_200_OK:
                 return None, Response({"error": "Unable to Fetch Access Token"}, status=status.HTTP_400_BAD_REQUEST)
             resp_json = token_response.json()
@@ -50,7 +49,7 @@ class PetFinder(APIView, PageNumberPagination):
         if error_response:
             return error_response
         headers = {'Authorization': f'Bearer {token}'}
-        url = PET_FINDER_BASE_URL
+        url = self.PET_FINDER_BASE_URL
         
         animal_type = request.GET.get('animal_type')
         if animal_type:
@@ -61,10 +60,7 @@ class PetFinder(APIView, PageNumberPagination):
                 resp = requests.get(f'{url}animals?type={animal_type}', headers=headers)
                 animal_list = resp.json().get('animals', [])
                 cache.set(key, animal_list, timeout=86400)  
-                
-            page = self.paginate_queryset(animal_list, request)
-            if page is not None:
-                return self.get_paginated_response(page)
+        
             return Response(animal_list)
         
         combined_animals = []
@@ -89,7 +85,4 @@ class PetFinder(APIView, PageNumberPagination):
                 except Exception:
                     logger.error(f"Error fetching data for {futures[future]}")
                     
-        page = self.paginate_queryset(combined_animals, request)
-        if page is not None:
-            return self.get_paginated_response(page)
         return Response(combined_animals)

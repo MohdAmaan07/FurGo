@@ -6,7 +6,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-PET_FINDER_BASE_URL = os.getenv('PET_FINDER_BASE_URL')
 
 class Command(BaseCommand):
     help = 'Refreshes the PetFinder cache'
@@ -19,7 +18,7 @@ class Command(BaseCommand):
             return
         
         headers = {'Authorization': f'Bearer {token}'}
-        url = PET_FINDER_BASE_URL
+        url = pet_finder.PET_FINDER_BASE_URL
         animals = pet_finder.animals
         
         for animal in animals:

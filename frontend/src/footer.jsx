@@ -32,19 +32,16 @@ const TopSection = styled.div`
 
 // Address Section - Left Aligned
 const Address = styled.div`
-  top: 790px; /* Adjusted from 200px to 100px to shift it upward */
-  left: 50px;
-  position: absolute;
   width: 30%;
   text-align: left;
   font-size: 22px;
-  line-height: 0.8; /* Improved line spacing */
-
+  line-height: 1.2; /* Improved line spacing */
+  position: relative; /* Changed from absolute */
+  
   @media (max-width: 768px) {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
-    position: static; /* Reset position for mobile */
   }
 `;
 
