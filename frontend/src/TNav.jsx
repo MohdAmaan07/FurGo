@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import logo from "./assets/FurGo.png";
 
 const Navbar = styled.nav`
@@ -24,15 +26,15 @@ const Navbar = styled.nav`
 
   .nav-item {
     margin-right: 20px;
-    cursor: pointer;
     font-size: 20px;
+    color: white;
+    text-decoration: none;
     transition: 0.3s;
-    color: white; /* Default color */
-    text-decoration: none; /* Remove underline */
+    cursor: pointer;
   }
 
   .nav-item:hover {
-    color: black; /* Hover color */
+    color: black;
   }
 `;
 
@@ -49,6 +51,14 @@ const Button = styled.button`
   &:hover {
     background: orange;
     color: black;
+  }
+`;
+
+const LogoutButton = styled(Button)`
+  border-color: red;
+  &:hover {
+    background: red;
+    color: white;
   }
 `;
 
@@ -110,9 +120,35 @@ const SubmitButton = styled.button`
   }
 `;
 
+const ErrorText = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
 const TopNavbar = () => {
   const [signUpOpen, setSignUpOpen] = useState(false);
-  const [signInOpen, setSignInOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const checkTokenValidity = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        await axios.post("http://localhost:8000/auth/jwt/verify/", { token });
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Token expired or invalid", error.response?.data || error.message);
+        handleLogout();
+      }
+    };
+
+    checkTokenValidity();
+  }, []);
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -121,39 +157,53 @@ const TopNavbar = () => {
     password: "",
   });
 
-  const [signInData, setSignInData] = useState({
-    email: "",
+  const [loginData, setLoginData] = useState({
+    username: "",
     password: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
-  const handleSignInChange = (e) => {
-    setSignInData({ ...signInData, [e.target.name]: e.target.value });
-  };
+  const handleLoginChange = (e) =>
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const response = await axios.post("http://localhost:8000/auth/users/", formData);
-      console.log("Sign Up Success", response.data);
+      await axios.post("http://localhost:8000/auth/users/", formData);
+      toast.success("Account created! Check your email to verify.", { position: "top-right" });
       setSignUpOpen(false);
     } catch (error) {
-      console.error("Sign Up Error", error.response.data);
+      console.error("Sign Up Error", error.response?.data || error.message);
+      setError(
+        error.response?.data?.detail || "Sign-up failed. Please check your details."
+      );
     }
   };
 
-  const handleSignIn = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const response = await axios.post("http://localhost:8000/auth/token/login/", signInData);
-      console.log("Sign In Success", response.data);
-      setSignInOpen(false);
+      const response = await axios.post("http://localhost:8000/auth/jwt/create/", loginData);
+      localStorage.setItem("token", response.data.access);
+      toast.success("Login Successful!", { position: "top-right" });
+      setIsAuthenticated(true);
+      setLoginOpen(false); // Close modal on successful login
     } catch (error) {
-      console.error("Sign In Error", error.response.data);
+      console.error("Login Error", error.response?.data || error.message);
+      setError(
+        error.response?.data?.detail || "Login failed! Check your username and password."
+      );
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.info("Logged out successfully!", { position: "top-right" });
+    setIsAuthenticated(false);
   };
 
   return (
@@ -171,8 +221,14 @@ const TopNavbar = () => {
           <Link to="/woofai" className="nav-item">
             WoofAI
           </Link>
-          <Button onClick={() => setSignInOpen(true)}>Sign In</Button>
-          <Button onClick={() => setSignUpOpen(true)}>Sign Up</Button>
+          {!isAuthenticated ? (
+            <>
+              <Button onClick={() => setLoginOpen(true)}>Login</Button>
+              <Button onClick={() => setSignUpOpen(true)}>Sign Up</Button>
+            </>
+          ) : (
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          )}
         </div>
       </Navbar>
 
@@ -181,6 +237,7 @@ const TopNavbar = () => {
         <ModalContent>
           <CloseButton onClick={() => setSignUpOpen(false)}>&times;</CloseButton>
           <h2>Sign Up</h2>
+          {error && <ErrorText>{error}</ErrorText>}
           <form onSubmit={handleSignUp}>
             <Input type="text" name="first_name" placeholder="First Name" onChange={handleChange} required />
             <Input type="text" name="last_name" placeholder="Last Name" onChange={handleChange} required />
@@ -192,14 +249,15 @@ const TopNavbar = () => {
         </ModalContent>
       </ModalOverlay>
 
-      {/* Sign In Modal */}
-      <ModalOverlay $isOpen={signInOpen}>
+      {/* Login Modal */}
+      <ModalOverlay $isOpen={loginOpen}>
         <ModalContent>
-          <CloseButton onClick={() => setSignInOpen(false)}>&times;</CloseButton>
-          <h2>Sign In</h2>
-          <form onSubmit={handleSignIn}>
-            <Input type="email" name="email" placeholder="Email" onChange={handleSignInChange} required />
-            <Input type="password" name="password" placeholder="Password" onChange={handleSignInChange} required />
+          <CloseButton onClick={() => setLoginOpen(false)}>&times;</CloseButton>
+          <h2>Login</h2>
+          {error && <ErrorText>{error}</ErrorText>}
+          <form onSubmit={handleLogin}>
+            <Input type="text" name="username" placeholder="Username" onChange={handleLoginChange} required />
+            <Input type="password" name="password" placeholder="Password" onChange={handleLoginChange} required />
             <SubmitButton type="submit">Login</SubmitButton>
           </form>
         </ModalContent>

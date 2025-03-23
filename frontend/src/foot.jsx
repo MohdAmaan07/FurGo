@@ -162,7 +162,7 @@ const styles = {
     borderRadius: "10px",
     boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
     zIndex: "2",
-    right: "600px"
+    // right: "600px"
   },
 
   cartIcon: {
