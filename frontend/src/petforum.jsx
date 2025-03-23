@@ -1,52 +1,95 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // For navigation
-import backgroundImage from './assets/background.jpg'; // Replace with your background image path
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import backgroundImage from './assets/background.jpg';
 import TopNavbar from './TNav';
 import BottomNav from './BNav';
 import Footer from './footer';
 import PhotoCollage from './photo';
+import fetchWithAuth from './fetchWithAuth';
 
-const PetSocialFeed = () => {
-  const [newPost, setNewPost] = useState({ photo: null, description: '' });
-  const navigate = useNavigate(); // Hook for navigation
+const API_BASE = 'http://127.0.0.1:8000';
 
-  // Handle file upload
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setNewPost({ ...newPost, photo: URL.createObjectURL(file) });
+const PetForum = () => {
+  const [newPost, setNewPost] = useState({ title: '', posts_image: null, description: '' });
+  const [username, setUsername] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetchWithAuth(`${API_BASE}/posts/`, {}, navigate);
+      if (response.ok) {
+        const data = await response.json();
+        setUsername(data.username);
+      } else {
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      navigate('/');
     }
   };
 
-  // Handle text input change
+  // Handles file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewPost({ ...newPost, posts_image: file });
+    }
+  };
+
+  // Handles title input
+  const handleTitleChange = (e) => {
+    setNewPost({ ...newPost, title: e.target.value });
+  };
+
+  // Handles description input
   const handleDescriptionChange = (e) => {
     setNewPost({ ...newPost, description: e.target.value });
   };
 
-  // Add a new post and navigate to Feed
-  const handleAddPost = () => {
-    if (newPost.photo && newPost.description) {
-      const post = {
-        id: Date.now(),
-        photo: newPost.photo,
-        description: newPost.description,
-        username: 'YourUsername', // Replace with dynamic username if available
-        displayPicture: 'https://via.placeholder.com/50', // Replace with dynamic DP if available
-      };
 
-      // Save the post to localStorage (or a global state/context)
-      const existingPosts = JSON.parse(localStorage.getItem('posts')) || [];
-      const updatedPosts = [post, ...existingPosts];
-      localStorage.setItem('posts', JSON.stringify(updatedPosts));
-
-      // Navigate to Feed
-      navigate('/community');
+  // Handle post submission
+  const handleAddPost = async () => {
+    if (!newPost.title || !newPost.description) {
+      alert('Please add a title and description.');
+      return;
     }
-  };
 
-  // Navigate to Feed
-  const goToFeed = () => {
-    navigate('/community');
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('title', newPost.title);
+    formData.append('content', newPost.description);
+    if (newPost.posts_image) {
+      formData.append('posts_image', newPost.posts_image);
+    }
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    } 
+    console.log('new post:', newPost);
+    try {
+      const response = await fetchWithAuth(`${API_BASE}/posts/`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('Post uploaded successfully!');
+        navigate('/community');
+      } else {
+        throw new Error('Failed to upload post.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,25 +97,24 @@ const PetSocialFeed = () => {
       <TopNavbar />
       <BottomNav />
       <div style={styles.container}>
-        {/* Background Image */}
         <div style={{ ...styles.backgroundImage, backgroundImage: `url(${backgroundImage})` }}></div>
 
-        {/* Header with Centered Title and Right-Aligned Feed Button */}
         <div style={styles.header}>
           <h1 style={styles.title}>PetInsta</h1>
-          <button onClick={goToFeed} style={styles.feedButton}>
+          <button onClick={() => navigate('/community')} style={styles.feedButton}>
             Feed
           </button>
         </div>
 
-        {/* Create a Post Section */}
         <div style={styles.createPostContainer}>
           <h2>Share Your Pet's Day</h2>
+          <p>Posting as: <strong>{username || 'Loading...'}</strong></p>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            style={styles.fileInput}
+            type="text"
+            placeholder="Enter title"
+            value={newPost.title}
+            onChange={handleTitleChange}
+            style={styles.inputField}
           />
           <textarea
             placeholder="What did your pet do today? Any issues?"
@@ -80,10 +122,15 @@ const PetSocialFeed = () => {
             onChange={handleDescriptionChange}
             style={styles.textarea}
           />
-          <button onClick={handleAddPost} style={styles.postButton}>
-            Post
+          <label style={styles.fileInputLabel}>
+            Choose an Image
+            <input type="file" accept="image/*" onChange={handleFileChange} style={styles.fileInput} />
+          </label>
+          <button onClick={handleAddPost} style={styles.postButton} disabled={loading || !username}>
+            {loading ? 'Posting...' : 'Post'}
           </button>
         </div>
+
         <PhotoCollage />
       </div>
       <Footer />
@@ -91,7 +138,6 @@ const PetSocialFeed = () => {
   );
 };
 
-// Inline CSS styles
 const styles = {
   container: {
     fontFamily: 'Montaga',
@@ -116,13 +162,13 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
-    position: 'relative', // To allow absolute positioning of the Feed button
+    position: 'relative',
   },
   title: {
     fontSize: '60px',
     color: 'black',
-    textAlign: 'center', // Center the title text
-    flex: 1, // Allow the title to take up remaining space
+    textAlign: 'center',
+    flex: 1,
   },
   feedButton: {
     backgroundColor: '#a277ff',
@@ -132,9 +178,9 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     fontSize: '20px',
-    position: 'absolute', // Position the button absolutely
+    position: 'absolute',
     right: -330,
-    top: 10 // Align the button to the right
+    top: 10,
   },
   createPostContainer: {
     marginBottom: '100px',
@@ -145,8 +191,16 @@ const styles = {
     color: 'purple',
     fontSize: '25px',
   },
-  fileInput: {
+  inputField: {
+    width: '96%',
+    padding: '10px',
     marginBottom: '10px',
+    fontSize: '16px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+  },
+  fileInput: {
+    display: 'none',
   },
   textarea: {
     width: '96%',
@@ -167,6 +221,18 @@ const styles = {
     cursor: 'pointer',
     fontSize: '20px',
   },
+  fileInputLabel: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#a277ff',
+    color: 'white',
+    fontSize: '16px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    textAlign: 'center',
+    border: 'none',
+    marginRight: '10px',
+  },
 };
 
-export default PetSocialFeed;
+export default PetForum;

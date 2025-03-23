@@ -36,7 +36,8 @@ const images = [
 const PhotoCollage = () => {
   const collageContainerStyle = {
     position: "relative",
-    width: "1200px",
+    width: "100%", // Use full width instead of fixed width
+    maxWidth: "1200px",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
@@ -45,7 +46,17 @@ const PhotoCollage = () => {
     backgroundColor: "transparent",
     padding: "2px",
     boxSizing: "border-box",
-    left: '-300px'
+    margin: "0 auto", // Centers the container
+  };
+  
+  const collageGridStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px", // Positive gap for spacing
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    justifyContent: "center",
   };
 
   const titleStyle = {
@@ -56,16 +67,6 @@ const PhotoCollage = () => {
     color: "purple",
     textTransform: "uppercase",
     textShadow: "2px 2px 8px rgba(0, 0, 0, 0.1)",
-  };
-
-  const collageGridStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "-100px",
-    width: "100%",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    justifyContent: "center",
   };
 
   const collageItemStyle = {
