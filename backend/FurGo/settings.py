@@ -17,13 +17,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load Env Variables
 import os
-from dotenv import load_dotenv
+import environ
 
-load_dotenv()
-PET_FINDER_BASE_URL = os.getenv('PET_FINDER_BASE_URL')
-PET_FINDER_TOKEN_URL = os.getenv('PET_FINDER_TOKEN_URL')
-PET_FINDER_CLIENT_ID = os.getenv('PET_FINDER_CLIENT_ID')
-PET_FINDER_CLIENT_SECRET = os.getenv('PET_FINDER_CLIENT_SECRET')
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
+env = environ.Env()
+
+PET_FINDER_BASE_URL = env('PET_FINDER_BASE_URL')
+PET_FINDER_TOKEN_URL = env('PET_FINDER_TOKEN_URL')
+PET_FINDER_CLIENT_ID = env('PET_FINDER_CLIENT_ID')
+PET_FINDER_CLIENT_SECRET = env('PET_FINDER_CLIENT_SECRET')
 
 # Logging
 LOGGING = {
@@ -74,6 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'djoser',
     'corsheaders',
     'authentication',
@@ -112,11 +115,27 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
+SITE_DOMAIN = "localhost:5173"  
+FRONTEND_URL = f"http://{SITE_DOMAIN}"
+
+
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'authentication.serializers.UserCreateSerializer',
-    }
+    },
+    "SEND_ACTIVATION_EMAIL": True,  
+    "ACTIVATION_URL": f"{FRONTEND_URL}/activate/{{uid}}/{{token}}",
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}/",
+    "TOKEN_MODEL": None,  
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'from@furgo.com'
 
 TEMPLATES = [
     {
