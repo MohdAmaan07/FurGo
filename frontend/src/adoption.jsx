@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Slider from "react-slick";
+import DefaultImg from "./assets/default.jpeg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,38 +19,51 @@ import BottomNav from "./BNav";
 import FAQSection from "./adopt";
 
 const AdoptionPage = () => {
-  const [filters, setFilters] = useState({
-    age: "",
-    type: "",
-    location: "",
-  });
+  const [appliedSearch, setAppliedSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  // pets state will hold the full list of pets fetched from the API
   const [pets, setPets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const petsPerPage = 6; // Number of pets per page
-  const [totalPages, setTotalPages] = useState(1);
+  const petsPerPage = 10; // Number of pets per page
 
-  // Fetch pets from the backend API using Axios
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get("https://your-api.com/pets", {
-          params: { page: currentPage, limit: petsPerPage },
-        });
-        setPets(response.data.pets);
-        setTotalPages(response.data.total_pages); // Assuming API sends total pages
+        const params = {};
+        if (appliedSearch) {
+          params.animal_type = appliedSearch;
+        }
+        const response = await axios.get("http://127.0.0.1:8000/pets/petfinder/", { params });
+        // The API returns an array of pet objects.
+        if (Array.isArray(response.data)) {
+          setPets(response.data);
+        } else if (Array.isArray(response.data.pets)) {
+          setPets(response.data.pets);
+        } else {
+          setPets([]);
+        }
+        // Reset current page when new data is fetched.
+        setCurrentPage(1);
       } catch (error) {
         console.error("Error fetching pets:", error);
+        setPets([]);
       }
     };
-    fetchPets();
-  }, [currentPage]); // Refetch when the page changes
 
-  const handleFilterChange = (filterType, value) => {
-    setFilters({ ...filters, [filterType]: value });
-  };
+    fetchPets();
+  }, [appliedSearch]);
+
+  // Calculate total pages based on the full pets array
+  const totalPages = Math.ceil(pets.length / petsPerPage) || 1;
+  // Get the pets for the current page
+  const currentPets = pets.slice(
+    (currentPage - 1) * petsPerPage,
+    currentPage * petsPerPage
+  );
 
   const handleSearch = () => {
+    setAppliedSearch(searchQuery);
+    setCurrentPage(1);
     console.log("Search Query:", searchQuery);
   };
 
@@ -90,10 +103,17 @@ const AdoptionPage = () => {
 
         {/* Pets List */}
         <PetsContainer>
-          {pets.length > 0 ? (
-            pets.map((pet) => (
+          {currentPets.length > 0 ? (
+            currentPets.map((pet) => (
               <PetCard key={pet.id}>
-                <PetImage src={pet.image_url} alt={pet.name} />
+                <PetImage
+                  src={
+                    pet.photos && pet.photos.length > 0
+                      ? pet.photos[0].medium
+                      : DefaultImg
+                  }
+                  alt={pet.name}
+                />
                 <PetInfo>
                   <h3>{pet.name}</h3>
                   <p>
@@ -104,7 +124,9 @@ const AdoptionPage = () => {
                   </p>
                   <p>
                     <FontAwesomeIcon icon={faMapMarkerAlt} /> Location:{" "}
-                    {pet.location}
+                    {pet.contact?.address
+                      ? `${pet.contact.address.city}, ${pet.contact.address.state}`
+                      : "Unknown"}
                   </p>
                 </PetInfo>
               </PetCard>
@@ -122,7 +144,10 @@ const AdoptionPage = () => {
           <PageIndicator>
             Page {currentPage} of {totalPages}
           </PageIndicator>
-          <PaginationButton onClick={nextPage} disabled={currentPage === totalPages}>
+          <PaginationButton
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+          >
             Next
           </PaginationButton>
         </PaginationContainer>
@@ -229,4 +254,3 @@ const PageIndicator = styled.span`
   font-size: 18px;
   margin: 0 10px;
 `;
-
