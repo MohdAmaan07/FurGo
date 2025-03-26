@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaFilter, FaShoppingCart, FaSearch } from "react-icons/fa";
 import Slider from "react-slick";
@@ -14,14 +14,13 @@ import C4 from "./assets/C4.png";
 import C5 from "./assets/C5.png";
 import PetShopHero from "./foot";
 
-
 // Styled Components
 const StoreContainer = styled.div`
   width: 97%;
   margin: auto;
   padding: 20px;
   font-family: "Montaga", serif;
-  background-color:rgba(88, 233, 165, 0.73)  
+  background-color: rgba(88, 233, 165, 0.73);
 `;
 
 const TopBar = styled.div`
@@ -31,136 +30,6 @@ const TopBar = styled.div`
   gap: 20px;
   margin-bottom: 20px;
   position: relative;
-`;
-
-// Search Bar Container
-const SearchContainer = styled.div`
-  position: relative;
-  width: 50%;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  height: 30px;
-  padding: 12px 45px 12px 40px; /* Left padding for icon */
-  font-size: 16px;
-  border: 2px solid #ddd;
-  border-radius: 15px;
-  outline: none;
-  text-align: left;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: 0.3s ease-in-out;
-
-  &:focus {
-    border-color: #ff6600;
-    box-shadow: 0px 4px 12px rgba(255, 102, 0, 0.4);
-  }
-`;
-
-// Search Icon inside input field (left side)
-const SearchIcon = styled(FaSearch)`
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 16px;
-`;
-
-// Search Button inside input field (right side)
-const SearchButton = styled.button`
-  position: absolute;
-  width: 80px;
-  height: 40px;
-  right: -75px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #ff6600;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:hover {
-    background: #cc5500;
-  }
-`;
-
-const IconsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: absolute;
-  right: 0;
-`;
-
-const IconButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
-  position: relative;
-
-  &:hover {
-    color: #ff6600;
-  }
-`;
-
-// Filter Dropdown
-const FilterDropdown = styled.div`
-  position: absolute;
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  top: 40px;
-  right: 0;
-  min-width: 200px;
-  display: ${({ show }) => (show ? "block" : "none")};
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-`;
-
-const FilterTitle = styled.h4`
-  font-size: 16px;
-  margin-bottom: 10px;
-  text-align: center;
-  color: #ff6600;
-`;
-
-const FilterOption = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #444;
-  transition: 0.2s;
-
-  &:hover {
-    color: #ff6600;
-    font-weight: bold;
-  }
-
-  input {
-    accent-color: #ff6600;
-  }
-`;
-
-// Carousel Container
-const CarouselContainer = styled.div`
-  width: 99.5%;
-  margin-bottom: 20px;
-`;
-
-const CarouselImage = styled.img`
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  border-radius: 10px;
 `;
 
 const ProductGrid = styled.div`
@@ -185,7 +54,6 @@ const ProductCard = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  left: 90px;
 `;
 
 const ProductImage = styled.img`
@@ -216,115 +84,78 @@ const AddToCartButton = styled.button`
   }
 `;
 
-const productsData = [
-  { id: 1, name: "Pet Food", image: "/product1.jpg", category: "Food" },
-  { id: 2, name: "Dog Toy", image: "/product2.jpg", category: "Toys" },
-  { id: 3, name: "Cat Bed", image: "/product3.jpg", category: "Beds & Homes" },
-  { id: 4, name: "Chew Bone", image: "/product4.jpg", category: "Food" },
-  { id: 5, name: "Bird Feeder", image: "/product5.jpg", category: "Birds" },
-  { id: 6, name: "Collar", image: "/product6.jpg", category: "Accessories" },
-];
+const PaginationButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+`;
 
-// Carousel Images
-const carouselImages = [
-  C3,
-  C4,
-  C5,
-];
+const PageButton = styled.button`
+  background: #ff6600;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background: #cc5500;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+`;
 
 const StorePage = () => {
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [nextPage, setNextPage] = useState(null);
+  const [prevPage, setPrevPage] = useState(null);
 
-  const filteredProducts = productsData.filter(
-    (product) =>
-      product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (filter === "" || product.category === filter)
-  );
+  useEffect(() => {
+    fetchProducts("http://127.0.0.1:8000/store/products/");
+  }, []);
 
-  // Carousel Settings
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 400,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+  const fetchProducts = async (url) => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setProducts(data.results);
+      setNextPage(data.next);
+      setPrevPage(data.previous);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   return (
-
     <>
-    <TopNavbar />
-    <BottomNav />
-    <StoreContainer>
-      {/* Search Bar & Icons */}
-      <TopBar>
-        <SearchContainer>
-          <SearchIcon />
-          <SearchInput
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <SearchButton>Search</SearchButton>
-        </SearchContainer>
-
-        <IconsContainer>
-          {/* Filter Icon */}
-          <IconButton onClick={() => setShowFilter(!showFilter)}>
-            <FaFilter />
-            <FilterDropdown show={showFilter}>
-              <FilterTitle>Filter By Category</FilterTitle>
-              {["All", "Food", "Toys", "Beds & Homes", "Accessories", "Birds", "Med Care"].map((category) => (
-                <FilterOption key={category}>
-                  <input
-                    type="radio"
-                    name="filter"
-                    value={category}
-                    checked={filter === category || (category === "All" && filter === "")}
-                    onChange={() => setFilter(category === "All" ? "" : category)}
-                  />
-                  {category}
-                </FilterOption>
-              ))}
-            </FilterDropdown>
-          </IconButton>
-
-          {/* Cart Icon */}
-          <IconButton>
-            <FaShoppingCart />
-          </IconButton>
-        </IconsContainer>
-      </TopBar>
-
-      {/* Carousel */}
-      <CarouselContainer>
-        <Slider {...carouselSettings}>
-          {carouselImages.map((image, index) => (
-            <div key={index}>
-              <CarouselImage src={image} alt={`Carousel ${index + 1}`} />
-            </div>
+      <TopNavbar />
+      <BottomNav />
+      <StoreContainer>
+        {/* Product Grid */}
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id}>
+              <ProductImage src={product.images[0] || "/default-image.jpg"} alt={product.title} />
+              <ProductName>{product.title}</ProductName>
+              <p>${product.unit_price}</p>
+              <AddToCartButton>Add to Cart</AddToCartButton>
+            </ProductCard>
           ))}
-        </Slider>
-      </CarouselContainer>
+        </ProductGrid>
 
-      {/* Product Grid */}
-      <ProductGrid>
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id}>
-            <ProductImage src={product.image} alt={product.name} />
-            <ProductName>{product.name}</ProductName>
-            <AddToCartButton>Add to Cart</AddToCartButton>
-          </ProductCard>
-        ))}
-      </ProductGrid>
-    </StoreContainer>
-    <PetShopHero />
-    <Footer />
+        {/* Pagination */}
+        <PaginationButtons>
+          <PageButton disabled={!prevPage} onClick={() => fetchProducts(prevPage)}>Previous</PageButton>
+          <PageButton disabled={!nextPage} onClick={() => fetchProducts(nextPage)}>Next</PageButton>
+        </PaginationButtons>
+      </StoreContainer>
+      <PetShopHero />
+      <Footer />
     </>
   );
 };

@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'djoser',
     'corsheaders',
+    'django_filters',
     'authentication',
     'pets',
     'posts',
