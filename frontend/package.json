@@ -21,7 +21,7 @@
   "description": "",
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.2.0"
+    "vite": "^6.2.3"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.7.2",

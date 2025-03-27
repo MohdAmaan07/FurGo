@@ -32,11 +32,13 @@ const TopSection = styled.div`
 
 // Address Section - Left Aligned
 const Address = styled.div`
-  width: 30%;
+  width: 50%;
   text-align: left;
   font-size: 22px;
-  line-height: 1.2; /* Improved line spacing */
+  line-height: 0.8; /* Improved line spacing */
   position: relative; /* Changed from absolute */
+  top: -30px;
+  left: -30px;
   
   @media (max-width: 768px) {
     width: 100%;
