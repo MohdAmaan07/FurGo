@@ -4,6 +4,7 @@ import { FaFilter, FaShoppingCart, FaSearch } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
 
 import TopNavbar from "./TNav";
 import Footer from "./footer";
@@ -295,9 +296,11 @@ const StorePage = () => {
           </IconButton>
 
           {/* Cart Icon */}
+          <Link to="/checkout" >
           <IconButton>
-            <FaShoppingCart />
+           <FaShoppingCart />
           </IconButton>
+          </Link>
         </IconsContainer>
       </TopBar>
 

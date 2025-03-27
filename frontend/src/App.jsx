@@ -18,6 +18,7 @@ import PetSocialFeed from "./petforum";
 import KnowYourPet from "./kyp";
 import Feed from "./feed";
 import AccountActivation from "./AccountActivation";
+import CheckoutPage from "./checkout";
 
 function HomePage() {
   return (
@@ -46,9 +47,11 @@ function App() {
       <Route path="/community" element={<Feed />} />
       <Route path="/kyp" element={<KnowYourPet />} />
       <Route path="/Feed" element={<PetSocialFeed />} />
-      <Route path="/activate/:uid/:token" element={<AccountActivation />} /> 
-    </Routes>
+      <Route path="/activate/:uid/:token" element={<AccountActivation />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      </Routes>
   );
 }
+
 
 export default App;

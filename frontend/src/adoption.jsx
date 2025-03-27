@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Slider from "react-slick";
+import DefaultImg from "./assets/default.jpeg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import dog6 from "./assets/dog6.png";
+import { useNavigate } from "react-router-dom";  // Import navigation hook
 
 import TopNavbar from "./TNav";
 import Footer from "./footer";
@@ -19,42 +20,51 @@ import BottomNav from "./BNav";
 import FAQSection from "./adopt";
 
 const AdoptionPage = () => {
-  const [filters, setFilters] = useState({
-    age: "",
-    type: "",
-    location: "",
-  });
+  const [appliedSearch, setAppliedSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [pets, setPets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const petsPerPage = 6; // Number of pets per page
-  const [totalPages, setTotalPages] = useState(1);
+  const petsPerPage = 10; 
+  const navigate = useNavigate();  // Initialize navigation
 
-  // Fetch pets from the backend API using Axios
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get("https://your-api.com/pets", {
-          params: { page: currentPage, limit: petsPerPage },
-        });
-        setPets(response.data.pets);
-        setTotalPages(response.data.total_pages); // Assuming API sends total pages
+        const params = {};
+        if (appliedSearch) {
+          params.animal_type = appliedSearch;
+        }
+        const response = await axios.get("http://127.0.0.1:8000/pets/petfinder/", { params });
+
+        if (Array.isArray(response.data)) {
+          setPets(response.data);
+        } else if (Array.isArray(response.data.pets)) {
+          setPets(response.data.pets);
+        } else {
+          setPets([]);
+        }
+        setCurrentPage(1);
       } catch (error) {
         console.error("Error fetching pets:", error);
+        setPets([]);
       }
     };
-    fetchPets();
-  }, [currentPage]); // Refetch when the page changes
 
-  const handleFilterChange = (filterType, value) => {
-    setFilters({ ...filters, [filterType]: value });
-  };
+    fetchPets();
+  }, [appliedSearch]);
+
+  const totalPages = Math.ceil(pets.length / petsPerPage) || 1;
+  const currentPets = pets.slice(
+    (currentPage - 1) * petsPerPage,
+    currentPage * petsPerPage
+  );
 
   const handleSearch = () => {
+    setAppliedSearch(searchQuery);
+    setCurrentPage(1);
     console.log("Search Query:", searchQuery);
   };
 
-  // Pagination Handlers
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -90,10 +100,17 @@ const AdoptionPage = () => {
 
         {/* Pets List */}
         <PetsContainer>
-          {pets.length > 0 ? (
-            pets.map((pet) => (
+          {currentPets.length > 0 ? (
+            currentPets.map((pet) => (
               <PetCard key={pet.id}>
-                <PetImage src={pet.image_url} alt={pet.name} />
+                <PetImage
+                  src={
+                    pet.photos && pet.photos.length > 0
+                      ? pet.photos[0].medium
+                      : DefaultImg
+                  }
+                  alt={pet.name}
+                />
                 <PetInfo>
                   <h3>{pet.name}</h3>
                   <p>
@@ -104,8 +121,14 @@ const AdoptionPage = () => {
                   </p>
                   <p>
                     <FontAwesomeIcon icon={faMapMarkerAlt} /> Location:{" "}
-                    {pet.location}
+                    {pet.contact?.address
+                      ? `${pet.contact.address.city}, ${pet.contact.address.state}`
+                      : "Unknown"}
                   </p>
+                  {/* View Details Button */}
+                  <DetailsButton onClick={() => navigate(`/pet/${pet.id}`, { state: { pet } })}>
+                    View Details
+                  </DetailsButton>
                 </PetInfo>
               </PetCard>
             ))
@@ -122,7 +145,10 @@ const AdoptionPage = () => {
           <PageIndicator>
             Page {currentPage} of {totalPages}
           </PageIndicator>
-          <PaginationButton onClick={nextPage} disabled={currentPage === totalPages}>
+          <PaginationButton
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+          >
             Next
           </PaginationButton>
         </PaginationContainer>
@@ -205,6 +231,16 @@ const PetInfo = styled.div`
   padding: 10px 0;
 `;
 
+const DetailsButton = styled.button`
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -229,4 +265,3 @@ const PageIndicator = styled.span`
   font-size: 18px;
   margin: 0 10px;
 `;
-
