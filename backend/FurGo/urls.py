@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('chatbot/', include('chatbot.urls')),
     path('store/', include('store.urls')),
     path('pets/', include('pets.urls')),
     path('posts/', include('posts.urls')),

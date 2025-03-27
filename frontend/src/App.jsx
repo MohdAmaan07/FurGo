@@ -17,6 +17,7 @@ import CarouselWithIcons from "./vet";
 import PetSocialFeed from "./petforum";
 import KnowYourPet from "./kyp";
 import Feed from "./feed";
+import Chatbot from "./chatbot";
 import AccountActivation from "./AccountActivation";
 
 function HomePage() {
@@ -36,18 +37,21 @@ function HomePage() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/store" element={<StorePage />} />
-      <Route path="/adoption" element={<AdoptionPage />} />
-      <Route path="/VirtualAdopt" element={<CarouselComponent />} />
-      <Route path="/WoofAI" element={<WoofAI />} />
-      <Route path="/Vet" element={<CarouselWithIcons />} />
-      <Route path="/community" element={<Feed />} />
-      <Route path="/kyp" element={<KnowYourPet />} />
-      <Route path="/Feed" element={<PetSocialFeed />} />
-      <Route path="/activate/:uid/:token" element={<AccountActivation />} /> 
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/store" element={<StorePage />} />
+        <Route path="/adoption" element={<AdoptionPage />} />
+        <Route path="/VirtualAdopt" element={<CarouselComponent />} />
+        <Route path="/WoofAI" element={<WoofAI />} />
+        <Route path="/Vet" element={<CarouselWithIcons />} />
+        <Route path="/community" element={<Feed />} />
+        <Route path="/kyp" element={<KnowYourPet />} />
+        <Route path="/Feed" element={<PetSocialFeed />} />
+        <Route path="/activate/:uid/:token" element={<AccountActivation />} /> 
+      </Routes>
+      <Chatbot />
+    </>
   );
 }
 

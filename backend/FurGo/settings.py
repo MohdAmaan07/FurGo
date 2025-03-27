@@ -27,6 +27,7 @@ PET_FINDER_BASE_URL = env('PET_FINDER_BASE_URL')
 PET_FINDER_TOKEN_URL = env('PET_FINDER_TOKEN_URL')
 PET_FINDER_CLIENT_ID = env('PET_FINDER_CLIENT_ID')
 PET_FINDER_CLIENT_SECRET = env('PET_FINDER_CLIENT_SECRET')
+GEMINI_API_KEY = env('GEMINI_API_KEY')
 
 # Logging
 LOGGING = {
@@ -62,7 +63,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-(z6!0z=x4sno33bk(4ukzo@)$iw0$ouqn5$(5jc*4f3%rxgyt='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -84,16 +85,20 @@ INSTALLED_APPS = [
     'authentication',
     'pets',
     'posts',
-    'debug_toolbar',
     'store',
     'tags',
     'likes',
     'core',
+    'chatbot',
 ]
+
+INSTALLED_APPS.append("whitenoise.runserver_nostatic")
+
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,6 +107,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -153,12 +163,13 @@ DEFAULT_FROM_EMAIL = 'from@furgo.com'
 
 # Celery
 
+from celery.schedules import crontab
+
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
 CELERY_BEAT_SCHEDULE = {
-    'notify_customers': {
-        'task': 'playground.tasks.notify_customers',
-        'schedule': 5,
-        'args': ['Hello World'],
+    'refresh_pet_data': {
+        'task': 'pets.tasks.refresh_pet_data',
+        'schedule': crontab(hour=0, minute=0),
     }
 }
 
@@ -185,15 +196,12 @@ WSGI_APPLICATION = 'FurGo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'FurGo',
-        'HOST': env('DB_HOST'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 
