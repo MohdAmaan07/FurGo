@@ -1,38 +1,75 @@
-import React, { useState } from 'react';
-import { FaMicrophone } from 'react-icons/fa'; // Import the microphone icon
+import React, { useState, useRef } from 'react';
+import { FaMicrophone } from 'react-icons/fa';
 import TopNavbar from './TNav';
 import BottomNav from './BNav';
 import Footer from './footer';
+import TestimonialCard from './woofcards';
+import talk from "./assets/talking.jpg";
+import bgImage from "./assets/background.jpg";  // Import local background image
 
 const WoofAI = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [audioFile, setAudioFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
 
-  // Handle microphone logo click
+  // 🎤 Toggle microphone options
   const handleMicClick = () => {
-    setShowOptions(!showOptions);
+    setShowOptions(prev => !prev);
+    console.log("Mic Clicked, showOptions:", !showOptions);
   };
 
-  // Handle record option
-  const handleRecord = () => {
+  // 🎙️ Start Recording
+  const handleRecord = async () => {
     setIsRecording(true);
     setShowOptions(false);
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunks.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+        setAudioFile(audioBlob);
+        console.log("Recording saved:", audioBlob);
+      };
+
+      mediaRecorder.start();
+      console.log("Recording started...");
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+    }
   };
 
-  // Handle upload option
+  // ⏹️ Stop Recording
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      handleSubmit();
+    }
+  };
+
+  // 📤 Upload Audio File
   const handleUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setAudioFile(file);
       setShowOptions(false);
+      console.log("File uploaded:", file.name);
     }
   };
 
-  // Handle submit (simulate analysis)
+  // 🔍 Simulated Analysis
   const handleSubmit = () => {
-    // Simulate analyzing the audio
     setTimeout(() => {
       setAnalysisResult({
         transcript: "This is a simulated transcript of the audio.",
@@ -46,6 +83,46 @@ const WoofAI = () => {
     <>
       <TopNavbar />
       <BottomNav />
+
+      {/* 🖼️ Large Banner Image with Text Overlay */}
+      <div style={{ 
+        position: 'relative', 
+        width: '100%', 
+        textAlign: 'center' ,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', /* Semi-transparent black overlay */
+
+      }}>
+        <img 
+          src={talk}
+          alt="Large Banner" 
+          style={{ width: '100%', maxHeight: '550px', objectFit: 'cover', filter: 'brightness(0.8)' }} 
+
+        />
+
+        {/* Text Overlay */}
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)', 
+            color: 'white', 
+            textAlign: 'center', 
+            textShadow: '2px 2px 8px rgba(0,0,0,0.7)',
+            padding: '20px',
+            width: '90%',
+          }}
+        >
+          <h1 style={{ fontSize: '3.5rem', fontWeight: 'bold', marginBottom: '10px' }}>
+            Wanna know what your pet wants to say to you?
+          </h1>
+          <h3 style={{ fontSize: '1.8rem', fontWeight: 'lighter' }}>
+            we present you
+          </h3>
+        </div>
+      </div>
+
+      {/* 🐶 Main Content Section */}
       <div
         style={{
           display: 'flex',
@@ -53,137 +130,57 @@ const WoofAI = () => {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          backgroundColor: 'rgb(231, 131, 68)',
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           padding: '20px',
           fontFamily: 'Montaga',
+          position: 'relative', // Ensures absolute positioning works inside
         }}
       >
-        {/* Title */}
         <h1 style={{ fontSize: '3.5rem', color: 'black', marginBottom: '10px' }}>WoofAI</h1>
-
-        {/* Description */}
-        <p style={{ fontSize: '1.5rem', color: 'black', marginBottom: '30px', textAlign: 'center' }}>
+        <p style={{ fontSize: '1.5rem', color: 'black', marginBottom: '20px', textAlign: 'center' }}>
           WoofAI is an innovative tool that analyzes your pet's sayings to provide insights such as transcription, sentiment, and keywords. Click the microphone to get started!
         </p>
 
-        {/* Microphone Logo */}
+        {/* 🎤 Microphone Button with Red Circle */}
         <div
           style={{
             position: 'relative',
             cursor: 'pointer',
             marginBottom: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '80px',
+            height: '80px',
+            backgroundColor: 'red',
+            borderRadius: '50%',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
           }}
           onClick={handleMicClick}
         >
-          <FaMicrophone
-            style={{ width: '50px', height: '50px', color: 'black' }} // Microphone icon
-          />
-
-          {/* Options (Record or Upload) */}
-          {showOptions && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '60px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                backgroundColor: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                padding: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-              }}
-            >
-              <button
-                onClick={handleRecord}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#007bff',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                }}
-              >
-                Record
-              </button>
-              <label
-                htmlFor="upload-audio"
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#28a745',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  fontSize: '14px',
-                }}
-              >
-                Upload
-                <input
-                  id="upload-audio"
-                  type="file"
-                  accept="audio/*"
-                  style={{ display: 'none' }}
-                  onChange={handleUpload}
-                />
-              </label>
-            </div>
-          )}
+          <FaMicrophone style={{ width: '50px', height: '50px', color: 'white' }} />
         </div>
 
-        {/* Recording Card */}
-        {isRecording && (
+        {/* 🎛️ Options (Record or Upload) */}
+        {showOptions && (
           <div
             style={{
+              position: 'absolute',
+              top: '330px',
               backgroundColor: '#fff',
-              borderRadius: '12px',
-              padding: '20px',
+              borderRadius: '8px',
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-              width: '300px',
-              textAlign: 'center',
+              padding: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              zIndex: 10, // Ensures visibility
             }}
           >
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Recording...</h3>
             <button
-              onClick={() => {
-                setIsRecording(false);
-                handleSubmit();
-              }}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#dc3545',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              Stop & Submit
-            </button>
-          </div>
-        )}
-
-        {/* Uploaded File Card */}
-        {audioFile && (
-          <div
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '12px',
-              padding: '20px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-              width: '600px',
-              textAlign: 'center',
-            }}
-          >
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Uploaded File</h3>
-            <p style={{ fontSize: '1rem', marginBottom: '20px' }}>{audioFile.name}</p>
-            <button
-              onClick={handleSubmit}
+              onClick={handleRecord}
               style={{
                 padding: '10px 20px',
                 backgroundColor: '#007bff',
@@ -191,14 +188,37 @@ const WoofAI = () => {
                 border: 'none',
                 borderRadius: '5px',
                 cursor: 'pointer',
+                fontSize: '14px',
               }}
             >
-              Submit for Analysis
+              Record
             </button>
+            <label
+              htmlFor="upload-audio"
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#28a745',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                textAlign: 'center',
+                fontSize: '14px',
+              }}
+            >
+              Upload
+              <input
+                id="upload-audio"
+                type="file"
+                accept="audio/*"
+                style={{ display: 'none' }}
+                onChange={handleUpload}
+              />
+            </label>
           </div>
         )}
 
-        {/* Analysis Result */}
+        {/* 📝 Analysis Result */}
         {analysisResult && (
           <div
             style={{
@@ -212,18 +232,15 @@ const WoofAI = () => {
             }}
           >
             <h3 style={{ fontSize: '2.5rem', marginBottom: '10px' }}>Analysis Result</h3>
-            <p style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
-              <strong>Transcript:</strong> {analysisResult.transcript}
-            </p>
-            <p style={{ fontSize: '1rem', marginBottom: '10px' }}>
-              <strong>Sentiment:</strong> {analysisResult.sentiment}
-            </p>
-            <p style={{ fontSize: '1rem', marginBottom: '10px' }}>
-              <strong>Keywords:</strong> {analysisResult.keywords.join(', ')}
-            </p>
+            <p><strong>Transcript:</strong> {analysisResult.transcript}</p>
+            <p><strong>Sentiment:</strong> {analysisResult.sentiment}</p>
+            <p><strong>Keywords:</strong> {analysisResult.keywords.join(' ')}</p>
           </div>
         )}
+
+        <TestimonialCard />
       </div>
+
       <Footer />
     </>
   );
