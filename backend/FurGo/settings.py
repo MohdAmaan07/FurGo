@@ -30,6 +30,10 @@ PET_FINDER_CLIENT_SECRET = env('PET_FINDER_CLIENT_SECRET')
 GEMINI_API_KEY = env('GEMINI_API_KEY')
 
 # Logging
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+    
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -37,7 +41,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'debug.log'),
+            'filename': os.path.join(LOG_DIR,'debug.log'),
             'maxBytes': 1024 * 1024 * 5, 
             'backupCount': 3,
         },
