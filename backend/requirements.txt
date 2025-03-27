@@ -8,6 +8,7 @@ django-filter==25.1
 djoser==2.3.1
 social-auth-app-django==5.4.3
 drf-nested-routers
+pillow==11.1.0
 
 # Celery for task queue management
 celery==5.4.0
