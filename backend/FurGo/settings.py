@@ -112,7 +112,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://furgo.vercel.app/",
+    "https://furgo.vercel.app",
 ]
 
 ROOT_URLCONF = 'FurGo.urls'
