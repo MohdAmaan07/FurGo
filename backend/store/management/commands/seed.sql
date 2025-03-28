@@ -1,4 +1,3 @@
--- Insert collections (ensure the order of collection ids matches)
 INSERT INTO store_collection (title) VALUES
     ('Dog Essentials'),
     ('Cat Essentials'),
@@ -10,12 +9,6 @@ INSERT INTO store_collection (title) VALUES
     ('Health & Wellness Essentials'),
     ('Seasonal Essentials');
 
--- Insert promotions
-INSERT INTO store_promotion (description, discount) VALUES
-    ('10% off on all pet food', 10.0),
-    ('Buy one get one free on toys', 50.0);
-
--- Insert products with correct collection_ids
 INSERT INTO store_product (title, slug, description, unit_price, inventory, last_update, collection_id) VALUES
     ('Dog Food - Chicken & Rice', 'dog-food-chicken-rice', 'Nutritious dog food with chicken and rice.', 19.99, 50, NOW(), 1),
     ('Dog Chew Toy', 'dog-chew-toy', 'Durable chew toy for dogs.', 9.99, 100, NOW(), 1),
@@ -46,18 +39,13 @@ INSERT INTO store_product (title, slug, description, unit_price, inventory, last
     ('Catnip Toys', 'catnip-toys', 'Fun toys infused with catnip.', 12.99, 120, NOW(), 2),
     ('Aquarium Air Pump', 'aquarium-air-pump', 'Silent air pump for fish tanks.', 27.99, 30, NOW(), 3);
 
--- Insert product promotions
+INSERT INTO store_promotion (description, discount) VALUES
+    ('10% off on all pet food', 10.0),
+    ('Buy one get one free on toys', 50.0);
+
 INSERT INTO store_product_promotions (product_id, promotion_id) VALUES
     (1, 1), (2, 2), (3, 1), (4, 2);
 
--- Insert order items
-INSERT INTO store_orderitem (order_id, product_id, quantity, unit_price) VALUES
-    (1, 1, 2, 19.99),
-    (1, 2, 3, 9.99),
-    (2, 3, 1, 24.99),
-    (2, 4, 2, 29.99);
-
--- Insert reviews
 INSERT INTO store_review (product_id, name, description, date) VALUES
     (1, 'Alice', 'My dog loves this food!', NOW()),
     (2, 'Bob', 'Great quality litter box.', NOW()),
