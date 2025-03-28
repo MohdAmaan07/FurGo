@@ -12,4 +12,4 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 # Populate the Database
-python manage.py seeb_db
+python manage.py seed_db
