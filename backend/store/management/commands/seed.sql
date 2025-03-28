@@ -3,19 +3,19 @@ INSERT INTO store_promotion (description, discount) VALUES
     ('10% off on all pet food', 10.0),
     ('Buy one get one free on toys', 50.0);
 
--- Insert collections (Removed "Reptile Essentials")
-INSERT INTO store_collection (title, featured_product_id) VALUES
-    ('Dog Essentials', NULL),
-    ('Cat Essentials', NULL),
-    ('Aquarium Essentials', NULL),
-    ('Bird Essentials', NULL),
-    ('Small Pet Essentials', NULL),
-    ('Grooming Essentials', NULL),
-    ('Training Essentials', NULL),
-    ('Health & Wellness Essentials', NULL),
-    ('Seasonal Essentials', NULL);
+-- Insert collections (ensure the order of collection ids matches)
+INSERT INTO store_collection (title) VALUES
+    ('Dog Essentials'),
+    ('Cat Essentials'),
+    ('Aquarium Essentials'),
+    ('Bird Essentials'),
+    ('Small Pet Essentials'),
+    ('Grooming Essentials'),
+    ('Training Essentials'),
+    ('Health & Wellness Essentials'),
+    ('Seasonal Essentials');
 
--- Insert products (Updated collection_id values)
+-- Insert products with correct collection_ids
 INSERT INTO store_product (title, slug, description, unit_price, inventory, last_update, collection_id) VALUES
     ('Dog Food - Chicken & Rice', 'dog-food-chicken-rice', 'Nutritious dog food with chicken and rice.', 19.99, 50, NOW(), 1),
     ('Dog Chew Toy', 'dog-chew-toy', 'Durable chew toy for dogs.', 9.99, 100, NOW(), 1),
