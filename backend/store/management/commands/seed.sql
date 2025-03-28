@@ -1,8 +1,3 @@
--- Insert promotions
-INSERT INTO store_promotion (description, discount) VALUES
-    ('10% off on all pet food', 10.0),
-    ('Buy one get one free on toys', 50.0);
-
 -- Insert collections (ensure the order of collection ids matches)
 INSERT INTO store_collection (title) VALUES
     ('Dog Essentials'),
@@ -14,6 +9,11 @@ INSERT INTO store_collection (title) VALUES
     ('Training Essentials'),
     ('Health & Wellness Essentials'),
     ('Seasonal Essentials');
+
+-- Insert promotions
+INSERT INTO store_promotion (description, discount) VALUES
+    ('10% off on all pet food', 10.0),
+    ('Buy one get one free on toys', 50.0);
 
 -- Insert products with correct collection_ids
 INSERT INTO store_product (title, slug, description, unit_price, inventory, last_update, collection_id) VALUES
