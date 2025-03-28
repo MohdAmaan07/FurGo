@@ -50,21 +50,6 @@ INSERT INTO store_product (title, slug, description, unit_price, inventory, last
 INSERT INTO store_product_promotions (product_id, promotion_id) VALUES
     (1, 1), (2, 2), (3, 1), (4, 2);
 
--- Insert customers
-INSERT INTO store_customer (phone, birth_date, membership, user_id) VALUES
-    ('123-456-7890', '1990-05-15', 'G', 1),
-    ('987-654-3210', '1985-09-22', 'S', 2);
-
--- Insert addresses
-INSERT INTO store_address (street, city, customer_id) VALUES
-    ('123 Pet Lane', 'Petville', 1),
-    ('456 Animal St', 'Furcity', 2);
-
--- Insert orders
-INSERT INTO store_order (placed_at, payment_status, customer_id) VALUES
-    (NOW(), 'C', 1),
-    (NOW(), 'P', 2);
-
 -- Insert order items
 INSERT INTO store_orderitem (order_id, product_id, quantity, unit_price) VALUES
     (1, 1, 2, 19.99),
