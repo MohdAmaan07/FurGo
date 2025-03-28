@@ -67,7 +67,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', 'False') == 'True'
+DEBUG = env.bool('DEBUG', default=False) == 'True'
 
 ALLOWED_HOSTS = []
 
