@@ -20,7 +20,7 @@ const KnowYourPet = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        let url = "http://127.0.0.1:8000/pets/petfinder/";
+        let url = "https://furgo.onrender.com/pets/petfinder/";
   
         if (searchQuery) {
           url += `?animal_type=${searchQuery}`;

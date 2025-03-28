@@ -7,7 +7,7 @@ import Footer from './footer';
 import PhotoCollage from './photo';
 import fetchWithAuth from './fetchWithAuth';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = 'https://furgo.onrender.com';
 
 const PetForum = () => {
   const [newPost, setNewPost] = useState({ title: '', posts_image: null, description: '' });

@@ -116,7 +116,7 @@ const StorePage = () => {
   const [prevPage, setPrevPage] = useState(null);
 
   useEffect(() => {
-    fetchProducts("http://127.0.0.1:8000/store/products/");
+    fetchProducts("https://furgo.onrender.com/store/products/");
   }, []);
 
   const fetchProducts = async (url) => {

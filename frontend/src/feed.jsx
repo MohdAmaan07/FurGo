@@ -7,7 +7,7 @@ import BottomNav from "./BNav";
 import PhotoCollage from "./photo";
 import Footer from "./footer";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://furgo.onrender.com";
 
 // Styled components
 const FeedContainer = styled.div`

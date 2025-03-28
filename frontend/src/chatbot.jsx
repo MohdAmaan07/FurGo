@@ -113,7 +113,7 @@ const FloatingChatbot = () => {
     setMessages([...messages, { text: input, isUser: true }]);
     setInput("");
     try {
-      const response = await fetch("http://127.0.0.1:8000/chatbot/chat", {
+      const response = await fetch("https://furgo.onrender.com/chatbot/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
