@@ -69,7 +69,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False) == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["furgo.onrender.com", "furgo.vercel.app"]
 
 
 # Application definition
@@ -114,6 +114,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "https://furgo.vercel.app",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'FurGo.urls'
 
