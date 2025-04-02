@@ -140,7 +140,11 @@ const StorePage = () => {
         <ProductGrid>
           {products.map((product) => (
             <ProductCard key={product.id}>
-              <ProductImage src={product.images[0] || "/default-image.jpg"} alt={product.title} />
+              <ProductImage 
+                src={product.product_images?.length > 0 ? product.product_images[0].image_url : "/default-image.jpg"} 
+                alt={product.title} 
+              />
+
               <ProductName>{product.title}</ProductName>
               <p>${product.unit_price}</p>
               <AddToCartButton>Add to Cart</AddToCartButton>
