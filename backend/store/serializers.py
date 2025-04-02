@@ -14,15 +14,17 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(method_name='get_image_url')
+    
     def create(self, validated_data):
         product_id = self.context['product_id']
         return ProductImage.objects.create(product_id=product_id, **validated_data)
 
     def get_image_url(self, product_image: ProductImage):
         request = self.context.get('request')
-        if request is None:
+        if request:
             return request.build_absolute_uri(product_image.image.url)
-        return f"{settings.MEDIA_URL}{self.image}"
+        return settings.STATIC_URL + product_image.image.url
     
     class Meta:
         model = ProductImage
