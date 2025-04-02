@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+from decimal import Decimal
 from uuid import uuid4
 
 from store.validators import validate_file_size
@@ -31,7 +32,7 @@ class Product(models.Model):
     unit_price = models.DecimalField(
         max_digits=6,
         decimal_places=2,
-        validators=[MinValueValidator(1)])
+        validators=[MinValueValidator(Decimal(1))])
     inventory = models.IntegerField(validators=[MinValueValidator(0)])
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(
@@ -49,7 +50,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(
-        upload_to='store/images',
+        upload_to='product_images',
         validators=[validate_file_size])
 
 

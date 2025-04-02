@@ -21,10 +21,14 @@ class ProductImageSerializer(serializers.ModelSerializer):
         return ProductImage.objects.create(product_id=product_id, **validated_data)
 
     def get_image_url(self, product_image: ProductImage):
+        if not product_image:
+            return None
+        
         request = self.context.get('request')
         if request:
             return request.build_absolute_uri(product_image.image.url)
-        return settings.STATIC_URL + product_image.image.url
+        
+        return settings.MEDIA_URL + product_image.image.url
     
     class Meta:
         model = ProductImage
