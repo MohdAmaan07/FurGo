@@ -3,7 +3,7 @@ from django.db import transaction
 from rest_framework import serializers
 from .signals import order_created
 from .models import Cart, CartItem, Customer, Order, OrderItem, Product, Collection, ProductImage, Review
-
+from django.conf import settings
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,9 +18,15 @@ class ProductImageSerializer(serializers.ModelSerializer):
         product_id = self.context['product_id']
         return ProductImage.objects.create(product_id=product_id, **validated_data)
 
+    def get_image_url(self, product_image: ProductImage):
+        request = self.context.get('request')
+        if request is None:
+            return request.build_absolute_uri(product_image.image.url)
+        return f"{settings.MEDIA_URL}{self.image}"
+    
     class Meta:
         model = ProductImage
-        fields = ['id', 'image']
+        fields = ['id', 'image_url']
 
 
 class ProductSerializer(serializers.ModelSerializer):
