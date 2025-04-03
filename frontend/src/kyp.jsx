@@ -9,6 +9,12 @@ import BottomNav from "./BNav";
 import Footer from "./footer";
 import TopNavbar from "./TNav";
 
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
+
 const KnowYourPet = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPet, setSelectedPet] = useState(null);
@@ -20,7 +26,8 @@ const KnowYourPet = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        let url = "https://furgo.onrender.com/pets/petfinder/";
+        // Use dynamic base URL instead of hardcoded one
+        let url = `${getBaseUrl()}/pets/petfinder/`;
   
         if (searchQuery) {
           url += `?animal_type=${searchQuery}`;

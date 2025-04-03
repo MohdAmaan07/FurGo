@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaPaw, FaPaperPlane, FaTimes } from "react-icons/fa";
 
+// Add dynamic base URL function
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
+
 const FloatingButton = styled.button`
   position: fixed;
   bottom: 100px;
@@ -63,7 +70,7 @@ const Message = styled.div`
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 5px;
-  max-width: 80%;
+  maxWidth: 80%;
 `;
 
 const ChatInputContainer = styled.div`
@@ -113,7 +120,8 @@ const FloatingChatbot = () => {
     setMessages([...messages, { text: input, isUser: true }]);
     setInput("");
     try {
-      const response = await fetch("https://furgo.onrender.com/chatbot/chat", {
+      // Use dynamic base URL instead of hardcoded URL
+      const response = await fetch(`${getBaseUrl()}/chatbot/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),

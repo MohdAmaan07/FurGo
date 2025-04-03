@@ -33,7 +33,7 @@ const AdoptionPage = () => {
         if (appliedSearch) {
           params.animal_type = appliedSearch;
         }
-        const response = await axios.get("https://furgo.onrender.com/pets/petfinder/", { params });
+        const response = await axios.get("http://127.0.0.1:8000/pets/petfinder/", { params });
         // The API returns an array of pet objects.
         if (Array.isArray(response.data)) {
           setPets(response.data);

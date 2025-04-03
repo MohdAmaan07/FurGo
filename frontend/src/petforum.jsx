@@ -7,7 +7,11 @@ import Footer from './footer';
 import PhotoCollage from './photo';
 import fetchWithAuth from './fetchWithAuth';
 
-const API_BASE = 'https://furgo.onrender.com';
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
 
 const PetForum = () => {
   const [newPost, setNewPost] = useState({ title: '', posts_image: null, description: '' });
@@ -21,7 +25,7 @@ const PetForum = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetchWithAuth(`${API_BASE}/posts/`, {}, navigate);
+      const response = await fetchWithAuth(`${getBaseUrl()}/posts/`, {}, navigate);
       if (response.ok) {
         const data = await response.json();
         setUsername(data.username);
@@ -52,7 +56,6 @@ const PetForum = () => {
     setNewPost({ ...newPost, description: e.target.value });
   };
 
-
   // Handle post submission
   const handleAddPost = async () => {
     if (!newPost.title || !newPost.description) {
@@ -73,7 +76,7 @@ const PetForum = () => {
     } 
     console.log('new post:', newPost);
     try {
-      const response = await fetchWithAuth(`${API_BASE}/posts/`, {
+      const response = await fetchWithAuth(`${getBaseUrl()}/posts/`, {
         method: 'POST',
         body: formData,
       });

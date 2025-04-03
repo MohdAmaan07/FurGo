@@ -7,7 +7,11 @@ import BottomNav from "./BNav";
 import PhotoCollage from "./photo";
 import Footer from "./footer";
 
-const API_BASE = "https://furgo.onrender.com";
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
 
 // Styled components
 const FeedContainer = styled.div`
@@ -18,7 +22,7 @@ const FeedContainer = styled.div`
 
 const SearchBar = styled.input`
   width: 100%;
-  max-width: 400px;
+  maxWidth: 400px;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -44,7 +48,7 @@ const PostContent = styled.p`
 
 const PostImage = styled.img`
   width: 100%;
-  max-width: 500px;
+  maxWidth: 500px;
   border-radius: 10px;
   margin-top: 10px;
 `;
@@ -57,7 +61,8 @@ const Feed = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetchWithAuth(`${API_BASE}/posts/`, {}, navigate);
+        // Use getBaseUrl() instead of API_BASE
+        const response = await fetchWithAuth(`${getBaseUrl()}/posts/`, {}, navigate);
 
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
@@ -70,7 +75,7 @@ const Feed = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [navigate]); 
 
   const filteredPosts = posts.filter(
     (post) =>
@@ -95,7 +100,12 @@ const Feed = () => {
           <PostContainer key={post.id}>
             <PostAuthor>{post.author.username}</PostAuthor>
             <PostContent>{post.content}</PostContent>
-            {post.posts_image && <PostImage src={post.posts_image} alt="Post" />}
+            {post.posts_image && (
+              <PostImage 
+                src={post.posts_image.replace('http://127.0.0.1:8000', getBaseUrl())} 
+                alt="Post" 
+              />
+            )}
           </PostContainer>
         ))}
 
