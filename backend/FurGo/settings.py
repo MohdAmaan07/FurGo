@@ -144,6 +144,8 @@ SIMPLE_JWT = {
 
 # Djoser
 
+FRONTEND_URL = "https://furgo.vercel.app"
+
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'authentication.serializers.UserCreateSerializer',

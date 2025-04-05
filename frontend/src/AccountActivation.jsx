@@ -24,7 +24,7 @@ const AccountActivation = () => {
         alert("Your account has been activated successfully!");
 
         // Redirect to login page
-        navigate("/login");
+        navigate("/");
       } catch (error) {
         console.error("Activation Error", error.response?.data || error.message);
         alert("Invalid or expired activation link.");
