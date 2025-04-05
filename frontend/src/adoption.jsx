@@ -18,6 +18,12 @@ import Footer from "./footer";
 import BottomNav from "./BNav";
 import FAQSection from "./adopt";
 
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
+
 const AdoptionPage = () => {
   const [appliedSearch, setAppliedSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,7 +39,7 @@ const AdoptionPage = () => {
         if (appliedSearch) {
           params.animal_type = appliedSearch;
         }
-        const response = await axios.get("http://127.0.0.1:8000/pets/petfinder/", { params });
+        const response = await axios.get(`${getBaseUrl()}pets/petfinder/`, { params });
         // The API returns an array of pet objects.
         if (Array.isArray(response.data)) {
           setPets(response.data);
