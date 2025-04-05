@@ -80,7 +80,7 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 10px;
   width: 90%;
-  max-width: 400px;
+  maxWidth: 400px;
   text-align: center;
   position: relative;
 `;
@@ -126,6 +126,12 @@ const ErrorText = styled.p`
   margin-top: 5px;
 `;
 
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
+
 const TopNavbar = () => {
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -138,7 +144,7 @@ const TopNavbar = () => {
       if (!token) return;
 
       try {
-        await axios.post("http://localhost:8000/auth/jwt/verify/", { token });
+        await axios.post(`${getBaseUrl()}/auth/jwt/verify/`, { token });
         setIsAuthenticated(true);
       } catch (error) {
         console.error("Token expired or invalid", error.response?.data || error.message);
@@ -172,7 +178,7 @@ const TopNavbar = () => {
     e.preventDefault();
     setError("");
     try {
-      await axios.post("http://localhost:8000/auth/users/", formData);
+      await axios.post(`${getBaseUrl()}/auth/users/`, formData);
       toast.success("Account created! Check your email to verify.", { position: "top-right" });
       setSignUpOpen(false);
     } catch (error) {
@@ -187,7 +193,7 @@ const TopNavbar = () => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post("http://localhost:8000/auth/jwt/create/", loginData);
+      const response = await axios.post(`${getBaseUrl()}/auth/jwt/create/`, loginData);
       localStorage.setItem("token", response.data.access);
       toast.success("Login Successful!", { position: "top-right" });
       setIsAuthenticated(true);
