@@ -144,7 +144,12 @@ SIMPLE_JWT = {
 
 # Djoser
 
-FRONTEND_URL = "https://furgo.vercel.app"
+if DEBUG:
+    FRONTEND_PROTOCOL = "http"
+    FRONTEND_DOMAIN   = "127.0.0.1:5173"
+else:
+    FRONTEND_PROTOCOL = "https"
+    FRONTEND_DOMAIN   = "furgo.vercel.app"
 
 DJOSER = {
     'SERIALIZERS': {
@@ -154,6 +159,8 @@ DJOSER = {
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}/",
     "TOKEN_MODEL": None,  
+    "EMAIL_FRONTEND_PROTOCOL": FRONTEND_PROTOCOL,
+    "EMAIL_FRONTEND_DOMAIN": FRONTEND_DOMAIN,
 }
 
 # Email
