@@ -80,7 +80,7 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 10px;
   width: 90%;
-  maxWidth: 400px;
+  max-width: 400px;
   text-align: center;
   position: relative;
 `;

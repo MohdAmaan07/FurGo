@@ -38,7 +38,7 @@ const AboutSection = styled.section`
 `;
 
 const AboutContent = styled.div`
-  maxWidth: 600px;
+  max-width: 600px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
