@@ -2,21 +2,18 @@
 # Exit on error
 set -o errexit
 
-# Make media directory if it doesn't exist
-mkdir -p /data/media
+# Instead of using /data/media, use a directory inside your project
+echo "Setting up media directory..."
+mkdir -p media
 
-# More verbose copy to help with debugging
-echo "Copying media files to persistent storage..."
-cp -rv media/* /data/media/ 2>/dev/null || echo "No media files to copy or directory doesn't exist"
+# Skip the copying step since we'll use this directory directly
+# and your product images are already in this directory
 
-# Set permissions
-chmod -R 755 /data/media
+# Set permissions on the media directory
+echo "Setting media directory permissions..."
+chmod -R 755 media
 
-# List files to verify (helps with debugging)
-echo "Files in persistent storage:"
-ls -la /data/media/
-
-# Modify this line as needed for your package manager (pip, poetry, etc.)
+# Install dependencies
 pip install -r requirements.txt
 
 # Convert static asset files
