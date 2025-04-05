@@ -113,7 +113,7 @@ const StyledWrapper = styled.div`
     margin-top: 7px;
   }
 
-  @media only screen and (max-width: 480px) {
+  @media only screen and (maxWidth: 480px) {
     .container {
       transform: scale(0.7);
     }

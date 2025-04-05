@@ -30,7 +30,7 @@ const AboutSection = styled.section`
   padding: 20px;
   font-family: "Montaga", serif;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     height: auto;
     min-height: 100vh;
     padding: 10px;
@@ -38,7 +38,7 @@ const AboutSection = styled.section`
 `;
 
 const AboutContent = styled.div`
-  max-width: 600px;
+  maxWidth: 600px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
@@ -47,8 +47,8 @@ const AboutContent = styled.div`
   position: relative;
   font-size: 19px;
 
-  @media (max-width: 768px) {
-    max-width: 90%;
+  @media (maxWidth: 768px) {
+    maxWidth: 90%;
     padding: 15px;
   }
 `;
@@ -61,7 +61,7 @@ const Image = styled.img`
   animation: ${({ x, y }) => moveOutwards(x, y)} 1s ease-out forwards;
   border-radius: 10px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 80px;
     height: 100px;
   }

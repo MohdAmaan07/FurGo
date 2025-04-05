@@ -10,6 +10,7 @@ import ReviewsCarousel from "./reviews";
 import Contact from "./contact";
 import Footer from "./footer";
 import StorePage from "./store";
+import Checkout from "./checkout";
 import AdoptionPage from "./adoption";
 import CarouselComponent from "./virtualadopt";
 import WoofAI from "./woof";
@@ -41,6 +42,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/store" element={<StorePage />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/adoption" element={<AdoptionPage />} />
         <Route path="/VirtualAdopt" element={<CarouselComponent />} />
         <Route path="/WoofAI" element={<WoofAI />} />

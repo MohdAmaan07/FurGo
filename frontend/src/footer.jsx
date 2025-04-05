@@ -12,7 +12,7 @@ const FooterContainer = styled.footer`
   flex-direction: column;
   font-family: "Montaga", serif;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     padding: 30px 5%;
     text-align: center;
   }
@@ -24,7 +24,7 @@ const TopSection = styled.div`
   align-items: flex-start;
   width: 100%;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     flex-direction: column;
     align-items: center;
   }
@@ -40,7 +40,7 @@ const Address = styled.div`
   top: -30px;
   left: -30px;
   
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
@@ -56,7 +56,7 @@ const QuickLinksContainer = styled.div`
   marginLeft: 600px
 
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     flex-direction: column;
     align-items: center;
@@ -90,7 +90,7 @@ const SocialIconsContainer = styled.div`
   flex-direction: column;
   align-items: flex-end;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     align-items: center;
     margin-top: 20px;
@@ -118,7 +118,7 @@ const FooterImage = styled.img`
   width: 200px;
   height: auto;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 80px;
   }
 `;

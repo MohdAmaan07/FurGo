@@ -17,7 +17,7 @@ const Contact = () => {
       margin: '0 auto',
       overflow: 'hidden',
       flexDirection: 'row', // Default layout for larger screens
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         flexDirection: 'column', // Stack vertically on mobile
         padding: '20px',
       },
@@ -27,7 +27,7 @@ const Contact = () => {
       marginRight: '40px',
       transform: 'translateX(-100%)',
       transition: 'transform 1s ease-out',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         marginRight: '0',
         marginBottom: '20px',
         width: '100%',
@@ -37,7 +37,7 @@ const Contact = () => {
       width: '650px',
       height: 'auto',
       borderRadius: '10px',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         width: '100%',
       },
     },
@@ -51,7 +51,7 @@ const Contact = () => {
       flex: 1,
       transform: 'translateX(100%)',
       transition: 'transform 1s ease-out',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         width: '100%',
       },
     },
@@ -63,7 +63,7 @@ const Contact = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         padding: '20px',
       },
     },
@@ -72,7 +72,7 @@ const Contact = () => {
       fontSize: '35px',
       color: 'black',
       fontFamily: 'Montaga',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         fontSize: '28px',
       },
     },
@@ -100,7 +100,7 @@ const Contact = () => {
       border: '2px solid rgb(128, 228, 226)',
       borderRadius: '5px',
       fontSize: '14px',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         width: '100%',
       },
     },
@@ -111,7 +111,7 @@ const Contact = () => {
       borderRadius: '5px',
       fontSize: '14px',
       resize: 'vertical',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         width: '100%',
       },
     },
@@ -124,7 +124,7 @@ const Contact = () => {
       fontSize: '16px',
       cursor: 'pointer',
       width: '300px',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         width: '100%',
       },
     },

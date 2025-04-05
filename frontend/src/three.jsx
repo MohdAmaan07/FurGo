@@ -13,7 +13,7 @@ const Container = styled.div`
   align-items: center;
   position: relative;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     flex-direction: column;
     gap: 10px;
     padding: 5px;
@@ -33,7 +33,7 @@ const LeftCard = styled.div`
     object-fit: cover;
   }
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     height: auto;
     max-height: 300px;
@@ -48,7 +48,7 @@ const RightCards = styled.div`
   gap: 10px;
   position: relative;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     gap: 5px;
   }
@@ -65,7 +65,7 @@ const TextOverlay = styled.div`
   transition: opacity 0.3s ease-in-out;
   text-align: center;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 18px;
   }
 `;
@@ -101,7 +101,7 @@ const Card = styled.div`
     object-fit: cover;
   }
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     position: static;
     width: 100%;
     height: auto;
@@ -119,7 +119,7 @@ const LargeCard = styled(Card)`
   top: -350px;
   left: -10px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     top: 0;
     left: 0;
     height: auto;
@@ -133,7 +133,7 @@ const SmallCard = styled(Card)`
   top: -120px;
   left: -10px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     top: 0;
     left: 0;
     height: auto;

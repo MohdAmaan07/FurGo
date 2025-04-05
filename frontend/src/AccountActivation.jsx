@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const getBaseUrl = () => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://furgo.onrender.com';
+};
+
 const AccountActivation = () => {
   const { uid, token } = useParams();
   const navigate = useNavigate();
@@ -9,7 +15,7 @@ const AccountActivation = () => {
   useEffect(() => {
     const activateAccount = async () => {
       try {
-        const response = await axios.post("http://localhost:8000/auth/users/activation/", {
+        const response = await axios.post(`${getBaseUrl()}/auth/users/activation/`, {
           uid,
           token,
         });

@@ -105,7 +105,7 @@ const Section = styled.div`
   padding: 50px 20px;
   position: relative;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     padding: 30px 10px;
   }
 `;
@@ -119,7 +119,7 @@ const Title = styled.h2`
   margin-bottom: 60px;
   margin-top: -80px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 30px;
     margin-bottom: 30px;
     margin-top: -40px;
@@ -134,7 +134,7 @@ const CardContainer = styled.div`
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     height: auto;
     flex-direction: column;
@@ -149,7 +149,7 @@ const ImageContainer = styled.div`
   background-size: cover;
   background-position: center;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     height: 300px;
   }
@@ -166,7 +166,7 @@ const ReviewContainer = styled.div`
   color: white;
   text-align: center;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 100%;
     padding: 20px;
   }
@@ -177,7 +177,7 @@ const ReviewText = styled.p`
   font-size: 20px;
   margin-bottom: 10px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 16px;
   }
 `;
@@ -187,7 +187,7 @@ const ReviewerName = styled.h3`
   font-size: 30px;
   margin-bottom: 10px;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 24px;
   }
 `;
@@ -196,7 +196,7 @@ const Stars = styled.div`
   font-size: 40px;
   color: #ffd700; /* Gold stars */
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 30px;
   }
 `;

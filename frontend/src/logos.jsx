@@ -46,11 +46,11 @@ const Title = styled.h2`
   margin-bottom: 5px;
   color: orange;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     font-size: 30px;
   }
 
-  @media (max-width: 480px) {
+  @media (maxWidth: 480px) {
     font-size: 24px;
   }
 `;
@@ -77,17 +77,17 @@ const CarouselTrack = styled.div`
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (maxWidth: 1024px) {
     gap: ${LOGO_GAP / 2}px;
     width: ${({ totalLogos }) => totalLogos * (LOGO_WIDTH * 0.8 + LOGO_GAP / 2)}px;
   }
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     gap: ${LOGO_GAP / 3}px;
     width: ${({ totalLogos }) => totalLogos * (LOGO_WIDTH * 0.6 + LOGO_GAP / 3)}px;
   }
 
-  @media (max-width: 480px) {
+  @media (maxWidth: 480px) {
     gap: ${LOGO_GAP / 4}px;
     width: ${({ totalLogos }) => totalLogos * (LOGO_WIDTH * 0.4 + LOGO_GAP / 4)}px;
   }
@@ -98,17 +98,17 @@ const Logo = styled.img`
   height: ${LOGO_HEIGHT}px;
   object-fit: contain; // Ensures logos scale properly
 
-  @media (max-width: 1024px) {
+  @media (maxWidth: 1024px) {
     width: ${LOGO_WIDTH * 0.8}px;
     height: ${LOGO_HEIGHT * 0.8}px;
   }
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: ${LOGO_WIDTH * 0.6}px;
     height: ${LOGO_HEIGHT * 0.6}px;
   }
 
-  @media (max-width: 480px) {
+  @media (maxWidth: 480px) {
     width: ${LOGO_WIDTH * 0.4}px;
     height: ${LOGO_HEIGHT * 0.4}px;
   }

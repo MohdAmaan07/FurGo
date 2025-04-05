@@ -21,7 +21,7 @@ const NavBar = styled.nav`
   height: 40px;
   z-index: 1000;
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     height: 70px;
     padding: 10px 0;
   }
@@ -41,7 +41,7 @@ const NavItem = styled(Link)`
     font-size: 22px;
     margin-bottom: 4px;
 
-    @media (max-width: 768px) {
+    @media (maxWidth: 768px) {
       font-size: 26px;
     }
   }
@@ -78,7 +78,7 @@ const MenuButton = styled.div`
     background: #ff8e72;
   }
 
-  @media (max-width: 768px) {
+  @media (maxWidth: 768px) {
     width: 65px;
     height: 65px;
 
@@ -87,7 +87,7 @@ const MenuButton = styled.div`
     }
   }
 
-  @media (max-width: 480px) {
+  @media (maxWidth: 480px) {
     width: 55px;
     height: 55px;
 
