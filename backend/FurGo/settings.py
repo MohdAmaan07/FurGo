@@ -67,10 +67,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False) == 'True'
+DEBUG = env.bool('DEBUG', default=False) == True
 
 ALLOWED_HOSTS = ["furgo.onrender.com", "furgo.vercel.app"]
 
+if DEBUG:
+    ALLOWED_HOSTS += ["127.0.0.1"]
 
 # Application definition
 
@@ -96,8 +98,6 @@ INSTALLED_APPS = [
     'chatbot',
 ]
 
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -111,9 +111,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    
 CORS_ALLOWED_ORIGINS = [
-    "https://furgo.vercel.app",
+    "https://furgo.vercel.app"
 ]
+
+if DEBUG:
+    CORS_ALLOWED_ORIGINS += ["http://127.0.0.1:5173"]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -134,8 +141,6 @@ SIMPLE_JWT = {
    'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
 }
 
-SITE_DOMAIN = "localhost:5173"  
-FRONTEND_URL = f"http://{SITE_DOMAIN}"
 
 # Djoser
 
@@ -144,7 +149,7 @@ DJOSER = {
         'user_create': 'authentication.serializers.UserCreateSerializer',
     },
     "SEND_ACTIVATION_EMAIL": True,  
-    "ACTIVATION_URL": f"{FRONTEND_URL}/activate/{{uid}}/{{token}}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}/",
     "TOKEN_MODEL": None,  
 }
