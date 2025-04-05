@@ -14,7 +14,11 @@ const getBaseUrl = () => {
 };
 
 const PetForum = () => {
-  const [newPost, setNewPost] = useState({ title: '', posts_image: null, description: '' });
+  const [newPost, setNewPost] = useState({
+    title: '',
+    posts_image: null,
+    description: '',
+  });
   const [username, setUsername] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,11 +29,17 @@ const PetForum = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetchWithAuth(`${getBaseUrl()}/posts/`, {}, navigate);
+      // Hit your "me" endpoint to get the logged-in user
+      const response = await fetchWithAuth(
+        `${getBaseUrl()}/auth/users/me/`,
+        {},
+        navigate
+      );
       if (response.ok) {
         const data = await response.json();
         setUsername(data.username);
       } else {
+        // not authenticated → back to login/home
         navigate('/');
       }
     } catch (error) {
@@ -38,32 +48,26 @@ const PetForum = () => {
     }
   };
 
-  // Handles file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setNewPost({ ...newPost, posts_image: file });
-    }
+    if (file) setNewPost((p) => ({ ...p, posts_image: file }));
   };
 
-  // Handles title input
   const handleTitleChange = (e) => {
-    setNewPost({ ...newPost, title: e.target.value });
+    setNewPost((p) => ({ ...p, title: e.target.value }));
   };
 
-  // Handles description input
   const handleDescriptionChange = (e) => {
-    setNewPost({ ...newPost, description: e.target.value });
+    setNewPost((p) => ({ ...p, description: e.target.value }));
   };
 
-  // Handle post submission
   const handleAddPost = async () => {
     if (!newPost.title || !newPost.description) {
       alert('Please add a title and description.');
       return;
     }
-
     setLoading(true);
+
     const formData = new FormData();
     formData.append('title', newPost.title);
     formData.append('content', newPost.description);
@@ -71,24 +75,27 @@ const PetForum = () => {
       formData.append('posts_image', newPost.posts_image);
     }
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    } 
-    console.log('new post:', newPost);
     try {
-      const response = await fetchWithAuth(`${getBaseUrl()}/posts/`, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetchWithAuth(
+        `${getBaseUrl()}/posts/`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+        navigate
+      );
+
+      const text = await response.text();
+      console.log('POST /posts/ →', response.status, text);
 
       if (response.ok) {
         alert('Post uploaded successfully!');
         navigate('/community');
       } else {
-        throw new Error('Failed to upload post.');
+        alert('Upload failed: ' + text);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error uploading post:', error);
       alert('Something went wrong. Try again.');
     } finally {
       setLoading(false);
@@ -100,18 +107,29 @@ const PetForum = () => {
       <TopNavbar />
       <BottomNav />
       <div style={styles.container}>
-        <div style={{ ...styles.backgroundImage, backgroundImage: `url(${backgroundImage})` }}></div>
+        <div
+          style={{
+            ...styles.backgroundImage,
+            backgroundImage: `url(${backgroundImage})`,
+          }}
+        />
 
         <div style={styles.header}>
           <h1 style={styles.title}>PetInsta</h1>
-          <button onClick={() => navigate('/community')} style={styles.feedButton}>
-            Feed
+          <button
+            onClick={() => navigate('/community')}
+            style={styles.feedButton}
+          >
+            Community
           </button>
         </div>
 
         <div style={styles.createPostContainer}>
           <h2>Share Your Pet's Day</h2>
-          <p>Posting as: <strong>{username || 'Loading...'}</strong></p>
+          <p>
+            Posting as: <strong>{username || 'Loading...'}</strong>
+          </p>
+
           <input
             type="text"
             placeholder="Enter title"
@@ -119,17 +137,29 @@ const PetForum = () => {
             onChange={handleTitleChange}
             style={styles.inputField}
           />
+
           <textarea
             placeholder="What did your pet do today? Any issues?"
             value={newPost.description}
             onChange={handleDescriptionChange}
             style={styles.textarea}
           />
+
           <label style={styles.fileInputLabel}>
             Choose an Image
-            <input type="file" accept="image/*" onChange={handleFileChange} style={styles.fileInput} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={styles.fileInput}
+            />
           </label>
-          <button onClick={handleAddPost} style={styles.postButton} disabled={loading || !username}>
+
+          <button
+            onClick={handleAddPost}
+            style={styles.postButton}
+            disabled={loading}
+          >
             {loading ? 'Posting...' : 'Post'}
           </button>
         </div>
@@ -202,9 +232,6 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
   },
-  fileInput: {
-    display: 'none',
-  },
   textarea: {
     width: '96%',
     height: '140px',
@@ -213,6 +240,19 @@ const styles = {
     fontSize: '16px',
     borderRadius: '5px',
     border: '1px solid #ccc',
+  },
+  fileInputLabel: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#a277ff',
+    color: 'white',
+    fontSize: '16px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginRight: '10px',
+  },
+  fileInput: {
+    display: 'none',
   },
   postButton: {
     fontFamily: 'Montaga',
@@ -223,18 +263,6 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     fontSize: '20px',
-  },
-  fileInputLabel: {
-    display: 'inline-block',
-    padding: '10px 20px',
-    backgroundColor: '#a277ff',
-    color: 'white',
-    fontSize: '16px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    textAlign: 'center',
-    border: 'none',
-    marginRight: '10px',
   },
 };
 

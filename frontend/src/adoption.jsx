@@ -39,7 +39,7 @@ const AdoptionPage = () => {
         if (appliedSearch) {
           params.animal_type = appliedSearch;
         }
-        const response = await axios.get(`${getBaseUrl()}pets/petfinder/`, { params });
+        const response = await axios.get(`${getBaseUrl()}/pets/petfinder/`, { params });
         // The API returns an array of pet objects.
         if (Array.isArray(response.data)) {
           setPets(response.data);

@@ -303,6 +303,7 @@ const StorePage = () => {
       const response = await fetch(url);
       const data = await response.json();
       setProducts(data.results);
+      console.log(products);
       
       // Fix pagination URLs
       if (data.next) {
@@ -382,6 +383,9 @@ const StorePage = () => {
       setIsAddingToCart(prev => ({ ...prev, [productId]: false }));
     }
   };
+
+  // console.log("Filtered Products:", filteredProducts);
+  console.log("Products:", products);
 
   return (
     <>

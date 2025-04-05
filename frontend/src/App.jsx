@@ -44,12 +44,12 @@ function App() {
         <Route path="/store" element={<StorePage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/adoption" element={<AdoptionPage />} />
-        <Route path="/VirtualAdopt" element={<CarouselComponent />} />
-        <Route path="/WoofAI" element={<WoofAI />} />
-        <Route path="/Vet" element={<CarouselWithIcons />} />
+        <Route path="/virtualAdopt" element={<CarouselComponent />} />
+        <Route path="/woofAI" element={<WoofAI />} />
+        <Route path="/vet" element={<CarouselWithIcons />} />
         <Route path="/community" element={<Feed />} />
-        <Route path="/kyp" element={<KnowYourPet />} />
-        <Route path="/Feed" element={<PetSocialFeed />} />
+        <Route path="/knowyourpets" element={<KnowYourPet />} />
+        <Route path="/petforum" element={<PetSocialFeed />} />
         <Route path="/activate/:uid/:token" element={<AccountActivation />} /> 
       </Routes>
       <Chatbot />
